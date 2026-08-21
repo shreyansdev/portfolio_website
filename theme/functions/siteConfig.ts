@@ -4,7 +4,7 @@ export const siteConfig = {
   tagline: "Full-Stack Developer, Cybersecurity Enthusiast & IoT Builder",
   description:
     "Personal portfolio of Shreyans Jain — Computer Science Student, Full-Stack Developer, Cybersecurity Enthusiast, and IoT Creator built with Next.js, Framer Motion, and Neo-Brutalist design.",
-  resumePath: "/resume.pdf",
+  resumePath: "./resume.pdf",
   socials: {
     linkedin: "https://linkedin.com/in/shreyansdev",
     github: "https://github.com/shreyansdev",

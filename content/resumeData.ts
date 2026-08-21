@@ -62,7 +62,7 @@ export const resumeData: ResumeData = {
     location: "Bengaluru, Karnataka, India",
     linkedin: "https://linkedin.com/in/shreyansdev",
     github: "https://github.com/shreyansdev",
-    resumePath: "/resume.pdf",
+    resumePath: "./resume.pdf",
   },
   education: [
     {
