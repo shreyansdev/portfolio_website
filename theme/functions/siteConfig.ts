@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Shreyans Jain",
-  title: "Shreyans Jain | Neo-Brutalist Portfolio",
+  title: "Shreyans Jain | Portfolio",
   tagline: "Full-Stack Developer, Cybersecurity Enthusiast & IoT Builder",
   description:
     "Personal portfolio of Shreyans Jain — Computer Science Student, Full-Stack Developer, Cybersecurity Enthusiast, and IoT Creator built with Next.js, Framer Motion, and Neo-Brutalist design.",

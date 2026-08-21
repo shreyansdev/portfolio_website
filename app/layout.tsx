@@ -17,6 +17,13 @@ export const metadata: Metadata = {
     "React Developer Bengaluru",
   ],
   authors: [{ name: siteConfig.name }],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/icon.svg",
+  },
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
