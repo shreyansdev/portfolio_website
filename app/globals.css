@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: #FFFDF5;
+    color: #0F0F0F;
+    font-family: var(--font-geist-sans), Inter, system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background-color: #FFE600;
+    color: #0F0F0F;
+  }
+}
+
+/* Custom Neo-Brutalist Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFDF5;
+  border-left: 3px solid #0F0F0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFE600;
+  border: 3px solid #0F0F0F;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00F0FF;
+}
+
+/* Focus styles for accessibility */
+a:focus-visible, button:focus-visible {
+  outline: 3px solid #FF007A;
+  outline-offset: 2px;
+}
