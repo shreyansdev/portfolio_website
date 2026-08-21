@@ -1,4 +1,4 @@
-# ⚡ Neo-Brutalist Portfolio — Shreyans Jain
+# ⚡ Portfolio Website — Shreyans Jain
 
 A high-contrast, interactive **Neo-Brutalist Portfolio** built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**. Designed to highlight projects in Full-Stack Development, Cybersecurity, Machine Learning, and IoT/Hardware.
 
