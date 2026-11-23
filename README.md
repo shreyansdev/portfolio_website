@@ -111,4 +111,4 @@ npm run build
 
 The website is statically generated and deployed to GitHub Pages via GitHub Actions:
 - The workflow is defined in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
-- Every push to the `main` branch triggers `npm ci`, builds the static site via `npm run build`, and publishes the resulting `out/` folder to GitHub Pages.
+- Every push to the `master` branch triggers `npm ci`, builds the static site via `npm run build`, and publishes the resulting `out/` folder to GitHub Pages.
