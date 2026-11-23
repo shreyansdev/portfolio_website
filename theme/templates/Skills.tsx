@@ -1,105 +1,99 @@
-"use client";
-
 import React from "react";
-import { AnimatedSection } from "../components/AnimatedSection";
-import { Badge } from "../components/Badge";
-import { Card } from "../components/Card";
 import { resumeData } from "../../content/resumeData";
-import { Code, Terminal, Cpu, Database, Shield, Brain } from "lucide-react";
+import { siteContent } from "../../content/siteContent";
+import { ChapterHeading } from "../components/ChapterHeading";
+import { Panel } from "../components/Panel";
+import { TagStagger } from "../components/anim/TagStagger";
+import { Stagger, StaggerItem } from "../components/anim/Stagger";
+import { Reveal } from "../components/anim/Reveal";
 
 export const Skills: React.FC = () => {
-  const getCategoryIcon = (category: string) => {
-    if (category.includes("Languages")) return Code;
-    if (category.includes("Web")) return Terminal;
-    if (category.includes("Machine")) return Brain;
-    if (category.includes("Embedded")) return Cpu;
-    if (category.includes("Databases")) return Database;
-    return Shield;
-  };
-
   return (
-    <AnimatedSection id="skills" className="bg-canvas">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="skills" className="py-16 sm:py-20 lg:py-28 relative overflow-hidden border-t-2 border-line">
+      <div className="w-[min(1180px,calc(100%-48px))] max-w-7xl mx-auto px-2 sm:px-4">
         
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
-          <div>
-            <Badge variant="yellow" size="lg" rotate="slight-left" className="mb-2">
-              03 /// TECH STACK & SKILLS
-            </Badge>
-            <h2 className="font-mono font-black text-3xl sm:text-5xl text-ink uppercase tracking-tight">
-              TOOLKIT & SPECIALIZATIONS
-            </h2>
-          </div>
-          <span className="font-mono text-sm font-bold bg-neo-cyan px-3 py-1 border-2 border-ink shadow-brutal-sm">
-            {resumeData.skillCategories.flatMap(c => c.skills).length}+ VERIFIED SKILLS
-          </span>
-        </div>
+        {/* Chapter 03 Header */}
+        <ChapterHeading
+          seal={siteContent.skills.chapter.seal}
+          eyebrow={siteContent.skills.chapter.eyebrow}
+          title={siteContent.skills.chapter.title}
+          verticalJp={siteContent.skills.chapter.verticalJp}
+        />
 
-        {/* Skill Category Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {/* Skills Grid: Staggered Panels */}
+        <Stagger
+          stagger={0.07}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"
+        >
           {resumeData.skillCategories.map((cat, idx) => {
-            const Icon = getCategoryIcon(cat.category);
-            
+            const num = String(idx + 1).padStart(2, "0");
+            const isTone = idx % 2 === 1;
+
             return (
-              <Card
-                key={idx}
-                bg="white"
-                shadowSize="brutal-lg"
-                stickerBadge={`0${idx + 1}`}
-                stickerColor={idx % 2 === 0 ? "yellow" : "cyan"}
-                className="flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-3 mb-4 pb-3 border-b-3 border-ink">
-                    <div className={`p-2.5 border-2 border-ink shadow-brutal-sm ${cat.color}`}>
-                      <Icon className="w-6 h-6 text-ink" />
-                    </div>
-                    <h3 className="font-mono font-black text-lg sm:text-xl text-ink uppercase">
-                      {cat.category}
-                    </h3>
+              <StaggerItem key={idx} className="h-full">
+                <Panel
+                  variant={isTone ? "tone" : "default"}
+                  animateOnScroll={false}
+                  className="min-h-[165px] sm:min-h-[190px] p-4 sm:p-6 flex flex-col justify-start h-full"
+                >
+                  <span className="font-display text-3xl sm:text-4xl block border-b border-line pb-2 mb-3 sm:mb-3.5 text-ink-new leading-none">
+                    {num}
+                  </span>
+                  <h3 className="font-display text-xl sm:text-[23px] uppercase mb-3 leading-tight text-ink-new">
+                    {cat.category}
+                  </h3>
+                  <div className="mt-auto sm:mt-0 pt-2">
+                    <TagStagger tags={cat.skills} />
                   </div>
-
-                  {/* Skills Tag Cloud */}
-                  <div className="flex flex-wrap gap-2.5 mt-2">
-                    {cat.skills.map((skill, sIdx) => (
-                      <Badge
-                        key={sIdx}
-                        variant={sIdx % 3 === 0 ? "yellow" : sIdx % 3 === 1 ? "cyan" : "white"}
-                        size="md"
-                        rotate={sIdx % 4 === 0 ? "slight-left" : sIdx % 4 === 2 ? "slight-right" : "none"}
-                        className="hover:bg-neo-pink hover:text-white transition-colors cursor-pointer"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-3 border-t-2 border-dashed border-ink/40 flex items-center justify-between text-xs font-mono font-bold text-ink-muted">
-                  <span>CATEGORY LEVEL: ADVANCED</span>
-                  <span className="text-neo-pink font-black">✓ VERIFIED</span>
-                </div>
-              </Card>
+                </Panel>
+              </StaggerItem>
             );
           })}
-        </div>
+        </Stagger>
 
-        {/* Bottom Banner */}
-        <div className="mt-12 bg-neo-yellow border-4 border-ink p-6 shadow-brutal-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Shield className="w-8 h-8 text-ink" />
-            <div>
-              <h4 className="font-mono font-black text-lg text-ink uppercase">CYBERSECURITY & NETWORKING PROFICIENCY</h4>
-              <p className="font-sans text-sm text-ink-muted">Trained in penetration testing, vulnerability analysis, Nmap, Wireshark, Metasploit & AES zero-knowledge crypto.</p>
+        {/* Wide Specialization Banner */}
+        <Reveal delay={0.2}>
+          <div className="mt-4 sm:mt-5 p-5 sm:p-6 border-[3px] border-line bg-tone relative pr-24 sm:pr-28">
+            <div className="font-mono text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-muted mb-1 font-medium">
+              {siteContent.skills.cybersecurityBanner.kicker}
             </div>
+            <h3 className="font-display text-xl sm:text-2xl uppercase text-ink-new leading-tight">
+              {siteContent.skills.cybersecurityBanner.heading}
+            </h3>
+            <p className="text-muted text-xs sm:text-sm mt-1 sm:mt-1.5 leading-relaxed max-w-2xl">
+              {siteContent.skills.cybersecurityBanner.body}
+            </p>
+
+            {/* Chibi hooded developer graphic */}
+            <svg
+              className="absolute w-[68px] sm:w-[78px] h-[75px] sm:h-[85px] right-3 -bottom-2 sm:-bottom-3 z-10 pointer-events-none"
+              viewBox="0 0 100 110"
+              aria-label={siteContent.skills.cybersecurityBanner.chibiAriaLabel}
+              role="img"
+            >
+              <path
+                d="M12 110Q8 70 22 44Q29 14 55 12Q84 15 88 51L95 110"
+                fill="var(--ink)"
+                stroke="var(--ink)"
+                strokeWidth="3"
+              />
+              <path
+                d="M27 57Q27 26 54 25Q79 27 80 58L73 79H34z"
+                fill="var(--paper)"
+                stroke="var(--ink)"
+                strokeWidth="3"
+              />
+              <path
+                d="m27 48 7-25 12 14 8-25 12 24 15-12-3 29"
+                fill="var(--ink)"
+              />
+              <path d="M37 57h12m12 0h12" stroke="var(--ink)" strokeWidth="4" />
+              <path d="M49 72q7 5 14 0" fill="none" stroke="var(--ink)" strokeWidth="2" />
+            </svg>
           </div>
-          <Badge variant="dark" size="lg" className="whitespace-nowrap">
-            KALI LINUX READY 🛡️
-          </Badge>
-        </div>
+        </Reveal>
 
       </div>
-    </AnimatedSection>
+    </section>
   );
 };

@@ -1,126 +1,133 @@
-"use client";
-
 import React from "react";
-import { AnimatedSection } from "../components/AnimatedSection";
-import { Card } from "../components/Card";
-import { Badge } from "../components/Badge";
 import { resumeData } from "../../content/resumeData";
-import { BookOpen, GraduationCap, Award, ShieldCheck, Cpu } from "lucide-react";
+import { siteConfig } from "../functions/siteConfig";
+import { siteContent } from "../../content/siteContent";
+import { ChapterHeading } from "../components/ChapterHeading";
+import { Panel } from "../components/Panel";
+import { Tag } from "../components/Tag";
+import { Reveal } from "../components/anim/Reveal";
+import { Stagger, StaggerItem } from "../components/anim/Stagger";
 
 export const About: React.FC = () => {
   return (
-    <AnimatedSection id="about" className="bg-canvas border-y-4 border-ink">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="about" className="py-16 sm:py-20 lg:py-28 relative overflow-hidden border-t-2 border-line">
+      <div className="w-[min(1180px,calc(100%-48px))] max-w-7xl mx-auto px-2 sm:px-4">
         
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
-          <div>
-            <Badge variant="cyan" size="lg" rotate="slight-left" className="mb-2">
-              02 /// ABOUT ME
-            </Badge>
-            <h2 className="font-mono font-black text-3xl sm:text-5xl text-ink uppercase tracking-tight">
-              ENGINEERING & CODE ARCHITECTURE
-            </h2>
-          </div>
-          <span className="font-mono text-sm font-bold bg-neo-yellow px-3 py-1 border-2 border-ink shadow-brutal-sm">
-            COMPUTER SCIENCE B.E.
-          </span>
-        </div>
+        {/* Chapter 02 Header */}
+        <ChapterHeading
+          seal={siteContent.about.chapter.seal}
+          eyebrow={siteContent.about.chapter.eyebrow}
+          title={siteContent.about.chapter.title}
+          verticalJp={siteContent.about.chapter.verticalJp}
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* About Grid: 7 cols main panel, 5 cols stats & certs on desktop */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
-          {/* Main Bio Card (7 Cols) */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            <Card bg="white" shadowSize="brutal-lg" stickerBadge="PROFILE BRIEF" stickerColor="yellow">
-              <h3 className="font-mono font-bold text-xl sm:text-2xl text-ink mb-4 flex items-center gap-2">
-                <GraduationCap className="w-6 h-6 text-neo-pink" />
-                Acharya Institute of Technology Student
-              </h3>
-              <p className="text-ink-muted text-base sm:text-lg leading-relaxed font-sans mb-4">
-                I am a Computer Science & Engineering undergraduate at Acharya Institute of Technology, Bengaluru (2023–2027), holding an active CGPA of <strong className="text-ink bg-neo-yellow px-1 border border-ink font-mono">8.45 / 10.0</strong>.
-              </p>
-              <p className="text-ink-muted text-base sm:text-lg leading-relaxed font-sans">
-                My passion lies at the intersection of <strong>Full-Stack Web Development</strong>, <strong>Cybersecurity</strong>, <strong>Machine Learning</strong>, and <strong>Embedded Systems / IoT</strong>. Whether it&apos;s building zero-persistence encrypted chat platforms, fine-tuning neural networks for image authenticity detection, or configuring low-level microcontrollers over Web Serial API, I focus on performance, security, and developer utility.
-              </p>
-            </Card>
+          {/* Main Bio Panel (7 cols) */}
+          <div className="lg:col-span-7">
+            <Panel className="p-6 sm:p-8 relative">
+              {/* Circular Avatar Peek */}
+              <div
+                className="avatar-peek border-[3px] border-line rounded-full overflow-hidden bg-tone select-none pointer-events-none"
+                aria-hidden="true"
+              >
+                <img
+                  src={siteConfig.avatarPath}
+                  alt={siteConfig.avatarAlt}
+                  className="w-full h-full object-cover object-[center_30%]"
+                />
+              </div>
 
-            {/* Relevant Coursework Card */}
-            <Card bg="cyan" shadowSize="brutal-lg" stickerBadge="CORE COURSEWORK" stickerColor="pink">
-              <h3 className="font-mono font-black text-lg text-ink mb-3 flex items-center gap-2">
-                <BookOpen className="w-5 h-5" /> RELEVANT ACADEMIC SUBJECTS
+              {/* Section Kicker */}
+              <div className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.08em] text-muted mb-2">
+                {siteContent.about.kicker}
+              </div>
+
+              {/* Subheading */}
+              <h3 className="font-display text-2xl sm:text-3xl uppercase mb-4 text-ink-new">
+                {siteContent.about.subheading}
               </h3>
-              <div className="flex flex-wrap gap-2">
-                {resumeData.coursework.map((course, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-white text-ink font-mono text-xs sm:text-sm font-bold px-3 py-1 border-2 border-ink shadow-brutal-sm hover:bg-neo-yellow transition-colors"
-                  >
-                    {course}
-                  </span>
+
+              {/* Bio Paragraphs */}
+              <div className="space-y-4 font-sans text-sm sm:text-base leading-relaxed text-ink-new">
+                {siteContent.about.paragraphs.map((p, idx) => (
+                  <p key={idx}>{p}</p>
                 ))}
               </div>
-            </Card>
+
+              {/* Coursework Tags */}
+              <div className="mt-8 pt-6 border-t-2 border-line">
+                <h4 className="font-display text-lg sm:text-xl uppercase mb-3 text-ink-new">
+                  {siteContent.about.courseworkHeading}
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {resumeData.coursework.map((course, idx) => (
+                    <Tag key={idx} variant="tag">
+                      {course}
+                    </Tag>
+                  ))}
+                </div>
+              </div>
+            </Panel>
           </div>
 
-          {/* Quick Metrics & Certifications Highlight (5 Cols) */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          {/* Right Column: Stats & Certifications (5 cols) */}
+          <div className="lg:col-span-5 flex flex-col gap-4 sm:gap-6">
             
-            {/* Highlights Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-neo-pink text-white border-4 border-ink p-4 shadow-brutal flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold uppercase opacity-90">CURRENT CGPA</span>
-                <span className="font-mono font-black text-3xl sm:text-4xl mt-2">8.45</span>
-                <span className="font-mono text-xs mt-1">/ 10.0 Scale</span>
-              </div>
+            {/* 2-up Stats Grid */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <Reveal delay={0.1}>
+                <div className="p-4 sm:p-5 border-2 border-line bg-tone">
+                  <span className="font-mono text-[10px] uppercase text-muted block">
+                    {siteContent.about.stats.cgpa.label}
+                  </span>
+                  <strong className="font-display text-2xl sm:text-4xl text-ink-new block mt-1 leading-tight">
+                    {siteContent.about.stats.cgpa.value}
+                  </strong>
+                </div>
+              </Reveal>
 
-              <div className="bg-neo-lime text-ink border-4 border-ink p-4 shadow-brutal flex flex-col justify-between">
-                <span className="font-mono text-xs font-bold uppercase">GRADUATION YEAR</span>
-                <span className="font-mono font-black text-3xl sm:text-4xl mt-2">2027</span>
-                <span className="font-mono text-xs">Acharya AIT</span>
-              </div>
+              <Reveal delay={0.2}>
+                <div className="p-4 sm:p-5 border-2 border-line bg-tone">
+                  <span className="font-mono text-[10px] uppercase text-muted block">
+                    {siteContent.about.stats.graduationYear.label}
+                  </span>
+                  <strong className="font-display text-2xl sm:text-4xl text-ink-new block mt-1 leading-tight">
+                    {siteContent.about.stats.graduationYear.value}
+                  </strong>
+                </div>
+              </Reveal>
             </div>
 
-            {/* Certifications Card */}
-            <Card bg="white" shadowSize="brutal-lg" stickerBadge="IIT CERTIFICATIONS" stickerColor="lime">
-              <h3 className="font-mono font-black text-lg text-ink mb-4 flex items-center gap-2">
-                <Award className="w-5 h-5 text-neo-purple" /> NPTEL (IIT) CERTIFICATIONS
-              </h3>
-
-              <div className="space-y-4">
-                {resumeData.certifications.map((cert, idx) => (
-                  <div key={idx} className="border-2 border-ink p-3 bg-canvas border-l-8 border-l-ink">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-mono font-black text-sm text-ink">{cert.title}</h4>
-                      {cert.distinction && (
-                        <span className="bg-neo-yellow text-ink text-xs font-mono font-black px-2 py-0.5 border border-ink">
-                          {cert.distinction} ({cert.score})
-                        </span>
-                      )}
+            {/* Certifications Cards */}
+            <Stagger stagger={0.12} className="flex flex-col gap-3 sm:gap-4">
+              {resumeData.certifications.map((cert, idx) => (
+                <StaggerItem key={idx}>
+                  <div className="halftone-corner border-2 border-line p-4 sm:p-5 relative bg-paper">
+                    <div className="font-mono text-[10px] uppercase text-muted">
+                      {cert.issuer} · {cert.year}
                     </div>
-                    <p className="font-mono text-xs text-ink-muted mt-1">{cert.issuer} • {cert.year}</p>
-                    <p className="font-sans text-xs text-ink mt-2">{cert.details}</p>
+                    <h4 className="font-display text-lg sm:text-xl uppercase text-ink-new mt-1 mb-1">
+                      {cert.title}
+                    </h4>
+                    <p className="font-mono text-xs font-bold text-ink-new mb-2">
+                      {cert.distinction ? `${cert.distinction} ` : ""}
+                      {cert.score ? `(${cert.score})` : ""}
+                    </p>
+                    <p className="font-sans text-xs sm:text-sm text-muted leading-relaxed">
+                      {cert.details}
+                    </p>
                   </div>
-                ))}
-              </div>
-            </Card>
-
-            {/* Key Focus Icons */}
-            <div className="bg-neo-purple text-white border-4 border-ink p-4 shadow-brutal flex items-center justify-between font-mono text-xs font-bold uppercase">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-neo-yellow" />
-                <span>ETHICAL HACKING</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Cpu className="w-5 h-5 text-neo-cyan" />
-                <span>IoT & HARDWARE</span>
-              </div>
-            </div>
+                </StaggerItem>
+              ))}
+            </Stagger>
 
           </div>
 
         </div>
 
       </div>
-    </AnimatedSection>
+    </section>
   );
 };

@@ -10,7 +10,6 @@ export interface EducationItem {
 export interface SkillCategory {
   category: string;
   skills: string[];
-  color: string;
 }
 
 export interface ProjectItem {
@@ -20,7 +19,6 @@ export interface ProjectItem {
   description: string[];
   category: string;
   githubUrl?: string;
-  liveUrl?: string;
   featured: boolean;
 }
 
@@ -95,32 +93,26 @@ export const resumeData: ResumeData = {
     {
       category: "Programming Languages",
       skills: ["Java", "C++", "Python", "JavaScript", "SQL"],
-      color: "bg-neo-yellow",
     },
     {
       category: "Web & Backend",
       skills: ["Node.js", "Express.js", "Socket.io", "FastAPI", "React", "Tailwind CSS", "HTML/CSS"],
-      color: "bg-neo-cyan",
     },
     {
       category: "Machine Learning",
       skills: ["EfficientNet-B0", "Image Classification", "Model Fine-Tuning", "Python Data Science"],
-      color: "bg-neo-pink",
     },
     {
       category: "Embedded Systems & IoT",
       skills: ["Arduino", "ESP32", "ESP8266", "Web Serial API", "Hardware I/O"],
-      color: "bg-neo-lime",
     },
     {
       category: "Databases & Security",
       skills: ["MySQL", "Network Security", "Ethical Hacking", "AES Encryption", "WebSockets"],
-      color: "bg-neo-purple",
     },
     {
       category: "Tools & Cyber Forensics",
       skills: ["Git", "GitHub", "Linux", "Kali Linux", "Nmap", "Wireshark", "Metasploit"],
-      color: "bg-neo-orange",
     },
   ],
   projects: [
@@ -133,8 +125,7 @@ export const resumeData: ResumeData = {
         "Fine-tuned an EfficientNet-B0 model on two curated Kaggle datasets for high-accuracy detection, wrapped in a FastAPI backend with image preprocessing behind a cyber-forensics investigation UI.",
       ],
       category: "AI / Machine Learning",
-      githubUrl: "https://github.com/shreyansdev",
-      liveUrl: "#",
+      githubUrl: "https://github.com/shreyansdev/ai-image-detector",
       featured: true,
     },
     {
@@ -146,8 +137,7 @@ export const resumeData: ResumeData = {
         "Implemented client-side AES encryption via CryptoJS with a zero-persistence architecture — messages are never stored or logged on the server and all session data is purged on exit.",
       ],
       category: "Web & Security",
-      githubUrl: "https://github.com/shreyansdev",
-      liveUrl: "#",
+      githubUrl: "https://github.com/shreyansdev/cipherchat",
       featured: true,
     },
     {
@@ -160,7 +150,6 @@ export const resumeData: ResumeData = {
       ],
       category: "IoT / Hardware",
       githubUrl: "https://github.com/shreyansdev/esp32_weather_station",
-      liveUrl: "#",
       featured: true,
     },
     {
@@ -173,7 +162,6 @@ export const resumeData: ResumeData = {
       ],
       category: "Embedded & Tools",
       githubUrl: "https://github.com/shreyansdev/web_serial_terminal",
-      liveUrl: "#",
       featured: true,
     },
   ],

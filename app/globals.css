@@ -2,40 +2,263 @@
 @tailwind components;
 @tailwind utilities;
 
+:root,
+html[data-theme="light"] {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --tone: #ededed;
+  --line: #0a0a0a;
+  --muted: #555555;
+  --dot: rgba(10, 10, 10, 0.17);
+  --shadow: 7px 7px 0 var(--ink);
+  --nav: rgba(255, 255, 255, 0.94);
+}
+
+html[data-theme="dark"] {
+  --paper: #0a0a0a;
+  --ink: #ffffff;
+  --tone: #1a1a1a;
+  --line: #ffffff;
+  --muted: #bcbcbc;
+  --dot: rgba(255, 255, 255, 0.18);
+  --shadow: 7px 7px 0 var(--ink);
+  --nav: rgba(10, 10, 10, 0.94);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 90px;
   }
   body {
-    background-color: #FFFDF5;
-    color: #0F0F0F;
-    font-family: var(--font-geist-sans), Inter, system-ui, -apple-system, sans-serif;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-inter), Arial, sans-serif;
+    line-height: 1.7;
+    transition: background-color 0.18s, color 0.18s;
     overflow-x: hidden;
   }
   ::selection {
-    background-color: #FFE600;
-    color: #0F0F0F;
+    background-color: var(--ink);
+    color: var(--paper);
+  }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
   }
 }
 
-/* Custom Neo-Brutalist Scrollbar */
+/* Manga Black and White Scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFFDF5;
-  border-left: 3px solid #0F0F0F;
+  background: var(--paper);
+  border-left: 2px solid var(--ink);
 }
 ::-webkit-scrollbar-thumb {
-  background: #FFE600;
-  border: 3px solid #0F0F0F;
+  background: var(--ink);
+  border: 2px solid var(--paper);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F0FF;
+  background: var(--muted);
 }
 
-/* Focus styles for accessibility */
-a:focus-visible, button:focus-visible {
-  outline: 3px solid #FF007A;
-  outline-offset: 2px;
+/* Reusable Manga Utility Classes and Effects */
+@layer utilities {
+  .halftone {
+    background-image: radial-gradient(var(--dot) 1px, transparent 1.3px);
+    background-size: 7px 7px;
+  }
+  .tone-shadow {
+    background-image: radial-gradient(var(--ink) 1px, transparent 1.4px);
+    background-size: 7px 7px;
+    background-color: var(--tone);
+  }
+  .cut-corner-panel {
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .vertical-jp {
+    writing-mode: vertical-rl;
+    font-family: var(--font-dm-mono), monospace;
+    letter-spacing: 0.25em;
+  }
+  .profile-frame {
+    border: 4px solid var(--ink);
+    background: var(--tone);
+    transform: rotate(3deg);
+    clip-path: polygon(0 0, 100% 0, 100% 91%, 91% 100%, 0 100%);
+    box-shadow: 12px 12px 0 var(--ink);
+  }
+
+  /* Neutral Grey Silhouette */
+  .silhouette {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #bdbdbd;
+    position: relative;
+  }
+  .silhouette::before {
+    content: "";
+    position: absolute;
+    width: 82px;
+    height: 105px;
+    background: #bdbdbd;
+    border-radius: 48% 48% 15% 15%;
+    top: 120px;
+    left: 29px;
+  }
+
+  /* Manga Avatar Peek in Cards */
+  .avatar-peek {
+    width: 54px;
+    height: 54px;
+    border: 3px solid var(--ink);
+    border-radius: 50%;
+    background: var(--tone);
+    overflow: hidden;
+    position: absolute;
+    right: 16px;
+    top: -22px;
+    z-index: 20;
+  }
+
+  /* SFX Sound Effects */
+  .sfx {
+    font-family: serif;
+    font-weight: 900;
+    writing-mode: vertical-rl;
+    letter-spacing: -0.1em;
+    -webkit-text-stroke: 1px var(--ink);
+    color: var(--paper);
+    text-shadow: 3px 3px 0 var(--ink);
+  }
+
+  /* Mini Panel Corner Fold */
+  .mini-panel-fold::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, transparent 49%, var(--ink) 50%, var(--ink) 53%, var(--paper) 54%);
+  }
+
+  /* Halftone Corner Texture */
+  .halftone-corner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(var(--dot) 1px, transparent 1.4px);
+    background-size: 6px 6px;
+    pointer-events: none;
+  }
+
+  /* Reusable Manga Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border: 2px solid var(--ink);
+    font-family: var(--font-dm-mono), "DM Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .btn.solid {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn.small {
+    padding: 9px 12px;
+  }
+
+  /* Manga End Word in Footer */
+  .end-word {
+    font-family: var(--font-anton), Anton, Impact, sans-serif;
+    font-size: clamp(100px, 23vw, 290px);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    text-align: center;
+    -webkit-text-stroke: 2px var(--ink);
+    color: transparent;
+    position: relative;
+  }
+  @media (max-width: 760px) {
+    .end-word {
+      font-size: 34vw;
+    }
+  }
+
+  /* Footer Chibi */
+  .footer-chibi {
+    position: absolute;
+    right: 7%;
+    top: 30px;
+    width: 86px;
+    height: 90px;
+  }
+  @media (max-width: 760px) {
+    .footer-chibi {
+      width: 68px;
+      top: 15px;
+      right: 4%;
+    }
+  }
+
+  /* Manga Stamp */
+  .stamp {
+    font-family: var(--font-dm-mono), "DM Mono", monospace;
+    font-size: 12px;
+    border: 2px solid var(--ink);
+    padding: 5px 7px;
+    display: inline-block;
+    transform: rotate(-8deg);
+  }
+
+  /* Slow Ambient Focus Lines Rotation */
+  .focus-lines-spin {
+    animation: focusSpin 80s linear infinite;
+    transform-origin: 250px 250px;
+  }
+}
+
+@keyframes focusSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .focus-lines-spin {
+    animation: none;
+  }
+}
+
+/* View Transitions Circular Mask Configuration */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }

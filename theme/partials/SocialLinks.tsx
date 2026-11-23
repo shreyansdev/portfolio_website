@@ -1,86 +1,112 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { Linkedin, Github, Mail, Phone } from "lucide-react";
 import { siteConfig } from "../functions/siteConfig";
 
 interface SocialLinksProps {
-  size?: "sm" | "md" | "lg";
-  showLabels?: boolean;
+  variant?: "text" | "icons";
   className?: string;
 }
 
 export const SocialLinks: React.FC<SocialLinksProps> = ({
-  size = "md",
-  showLabels = false,
+  variant = "text",
   className = "",
 }) => {
-  const links = [
-    {
-      name: "LinkedIn",
-      href: siteConfig.socials.linkedin,
-      icon: Linkedin,
-      color: "bg-[#0A66C2] text-white",
-      hoverBg: "hover:bg-neo-cyan hover:text-ink",
-    },
-    {
-      name: "GitHub",
-      href: siteConfig.socials.github,
-      icon: Github,
-      color: "bg-ink text-white",
-      hoverBg: "hover:bg-neo-yellow hover:text-ink",
-    },
-    {
-      name: "Email",
-      href: siteConfig.socials.email,
-      icon: Mail,
-      color: "bg-[#EA4335] text-white",
-      hoverBg: "hover:bg-neo-pink hover:text-white",
-    },
-    {
-      name: "Phone",
-      href: siteConfig.socials.phone,
-      icon: Phone,
-      color: "bg-[#25D366] text-ink",
-      hoverBg: "hover:bg-neo-lime hover:text-ink",
-    },
-  ];
-
-  const iconSizes = {
-    sm: "w-4 h-4",
-    md: "w-5 h-5",
-    lg: "w-6 h-6",
-  };
-
-  const containerPadding = {
-    sm: "p-2",
-    md: "p-2.5",
-    lg: "p-3",
-  };
+  if (variant === "text") {
+    return (
+      <div className={`flex gap-3 sm:gap-4 items-center ${className}`}>
+        <a
+          href={siteConfig.socials.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-line font-mono text-xs py-1 text-ink-new hover:opacity-70 transition-opacity"
+        >
+          LinkedIn
+        </a>
+        <a
+          href={siteConfig.socials.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-b border-line font-mono text-xs py-1 text-ink-new hover:opacity-70 transition-opacity"
+        >
+          GitHub
+        </a>
+      </div>
+    );
+  }
 
   return (
-    <div className={`flex flex-wrap items-center gap-3 ${className}`}>
-      {links.map((link) => {
-        const Icon = link.icon;
-        const isExternal = link.href.startsWith("http");
+    <div className={`flex items-center gap-2.5 ${className}`} aria-label="Social links">
+      {/* LinkedIn */}
+      <a
+        href={siteConfig.socials.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        className="w-[38px] h-[38px] border-[1.5px] border-line grid place-items-center text-ink-new hover:bg-tone transition-colors bg-paper"
+      >
+        <svg
+          className="w-[17px] h-[17px]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path d="M5 9v10M5 5v.1M10 19v-6a3 3 0 0 1 6 0v6M10 9v10M3 3h18v18H3z" />
+        </svg>
+      </a>
 
-        return (
-          <motion.a
-            key={link.name}
-            href={link.href}
-            target={isExternal ? "_blank" : undefined}
-            rel={isExternal ? "noopener noreferrer" : undefined}
-            whileHover={{ scale: 1.08, y: -3, boxShadow: "5px 5px 0px 0px #0F0F0F" }}
-            whileTap={{ scale: 0.95, y: 0, boxShadow: "1px 1px 0px 0px #0F0F0F" }}
-            aria-label={link.name}
-            className={`inline-flex items-center gap-2 font-mono font-bold text-xs uppercase border-2 border-ink shadow-brutal transition-colors select-none ${link.color} ${link.hoverBg} ${containerPadding[size]}`}
-          >
-            <Icon className={iconSizes[size]} />
-            {showLabels && <span>{link.name}</span>}
-          </motion.a>
-        );
-      })}
+      {/* GitHub */}
+      <a
+        href={siteConfig.socials.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+        className="w-[38px] h-[38px] border-[1.5px] border-line grid place-items-center text-ink-new hover:bg-tone transition-colors bg-paper"
+      >
+        <svg
+          className="w-[17px] h-[17px]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+        </svg>
+      </a>
+
+      {/* Email */}
+      <a
+        href={siteConfig.socials.email}
+        aria-label="Email"
+        className="w-[38px] h-[38px] border-[1.5px] border-line grid place-items-center text-ink-new hover:bg-tone transition-colors bg-paper"
+      >
+        <svg
+          className="w-[17px] h-[17px]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="1" />
+          <path d="m3 7 9 7 9-7" />
+        </svg>
+      </a>
+
+      {/* Phone */}
+      <a
+        href={siteConfig.socials.phone}
+        aria-label="Phone"
+        className="w-[38px] h-[38px] border-[1.5px] border-line grid place-items-center text-ink-new hover:bg-tone transition-colors bg-paper"
+      >
+        <svg
+          className="w-[17px] h-[17px]"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8L7.7 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5a2 2 0 0 1 2.2 2.5z" />
+        </svg>
+      </a>
     </div>
   );
 };

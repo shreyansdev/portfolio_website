@@ -1,107 +1,125 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Terminal, ArrowUpRight } from "lucide-react";
+import { m } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import { siteConfig } from "../functions/siteConfig";
+import { siteContent } from "../../content/siteContent";
+import { ThemeToggle } from "./ThemeToggle";
 import { ResumeButton } from "./ResumeButton";
-import { Badge } from "../components/Badge";
+import { ScrollProgress } from "../components/anim/ScrollProgress";
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [activeId, setActiveId] = useState<string>("hero");
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const sectionIds = siteConfig.navItems.map((item) => item.href.replace("#", ""));
+    const elements = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if ("IntersectionObserver" in window && elements.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveId(entry.target.id);
+            }
+          });
+        },
+        { rootMargin: "-35% 0px -55% 0px" }
+      );
+
+      elements.forEach((el) => observer.observe(el));
+      return () => observer.disconnect();
+    }
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
-        scrolled ? "py-2 bg-canvas/95 backdrop-blur-md" : "py-4 bg-canvas"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between bg-white border-[3px] border-ink p-3 shadow-brutal">
-          {/* Logo Badge */}
-          <a href="#hero" className="flex items-center gap-2 group">
-            <Badge variant="yellow" size="md" rotate="slight-left" className="group-hover:rotate-0 transition-transform">
-              <Terminal className="w-4 h-4" />
-              <span>SHREYANSDEV</span>
-            </Badge>
+    <>
+      <header className="sticky top-0 z-50 h-[76px] bg-nav border-b-2 border-line backdrop-blur-md transition-colors">
+        <div className="w-[min(1180px,calc(100%-64px))] max-w-7xl mx-auto h-full flex items-center justify-between gap-6 px-4">
+          {/* Brand Logo */}
+          <a
+            href="#hero"
+            className="font-display text-[26px] tracking-[0.04em] uppercase text-ink-new whitespace-nowrap hover:opacity-85 transition-opacity"
+          >
+            {siteContent.nav.logo}
           </a>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-            {siteConfig.navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="px-3 py-1.5 font-mono text-xs lg:text-sm font-bold text-ink hover:bg-neo-cyan hover:border-2 hover:border-ink hover:shadow-brutal-sm transition-all border-2 border-transparent"
-              >
-                {item.label}
-              </a>
-            ))}
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-[22px]" aria-label="Main navigation">
+            {siteConfig.navItems.map((item) => {
+              const targetId = item.href.replace("#", "");
+              const isActive = activeId === targetId;
+
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`relative font-mono text-[11px] tracking-[0.02em] text-ink-new transition-colors py-2.5 ${
+                    isActive ? "font-bold opacity-100" : "opacity-75 hover:opacity-100"
+                  }`}
+                >
+                  {item.label}
+                  {isActive && (
+                    <m.span
+                      layoutId="activeNavUnderline"
+                      className="absolute left-0 right-0 bottom-0 h-[3.5px] bg-ink-new -skew-x-[25deg] pointer-events-none"
+                      transition={{ type: "spring", stiffness: 380, damping: 28 }}
+                    />
+                  )}
+                </a>
+              );
+            })}
           </nav>
 
-          {/* Action Area: Resume Download Button & Mobile Toggle */}
+          {/* Nav Actions */}
           <div className="flex items-center gap-3">
-            <ResumeButton variant="primary" size="sm" className="hidden sm:inline-flex" />
+            <ThemeToggle />
 
-            {/* Mobile Hamburger Toggle */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
+            <ResumeButton className="hidden sm:inline-flex btn small resume-nav" />
+
+            {/* Mobile Menu Button */}
+            <button
+              type="button"
               onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle navigation menu"
-              className="md:hidden p-2 bg-neo-yellow border-2 border-ink shadow-brutal-sm text-ink"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              className="md:hidden w-[42px] h-[42px] border-[1.5px] border-line bg-paper grid place-items-center text-ink-new cursor-pointer"
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.button>
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu Drawer */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden max-w-7xl mx-auto px-4 mt-2"
-          >
-            <div className="bg-neo-yellow border-[3px] border-ink p-6 shadow-brutal-lg flex flex-col gap-4">
-              <div className="flex items-center justify-between border-b-2 border-ink pb-3">
-                <span className="font-mono font-black text-sm uppercase">/// MENU NAVIGATION</span>
-                <span className="font-mono text-xs font-bold bg-white px-2 py-0.5 border border-ink">SELECT SECTION</span>
-              </div>
+        {/* Top Scroll Progress Bar */}
+        <ScrollProgress />
+      </header>
 
-              <div className="flex flex-col gap-2">
-                {siteConfig.navItems.map((item) => (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-between p-3 bg-white border-2 border-ink shadow-brutal-sm font-mono font-bold text-base hover:bg-neo-cyan transition-colors"
-                  >
-                    <span>{item.label}</span>
-                    <ArrowUpRight className="w-5 h-5" />
-                  </a>
-                ))}
-              </div>
-
-              <div className="pt-2 border-t-2 border-ink flex flex-col gap-3">
-                <ResumeButton variant="dark" size="md" className="w-full justify-center" />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+      {/* Full-Screen Mobile Menu Panel */}
+      {isOpen && (
+        <nav
+          className="fixed inset-x-0 top-[76px] bottom-0 bg-paper z-40 p-8 flex flex-col gap-3 border-t-2 border-line overflow-y-auto"
+          aria-label="Mobile navigation"
+        >
+          {siteConfig.navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={() => setIsOpen(false)}
+              className="font-display text-3xl text-ink-new border-b border-line py-3 uppercase hover:pl-2 transition-all"
+            >
+              {item.label}
+            </a>
+          ))}
+          <ResumeButton
+            onClick={() => setIsOpen(false)}
+            variant="solid"
+            className="mt-4 btn"
+          />
+        </nav>
+      )}
+    </>
   );
 };

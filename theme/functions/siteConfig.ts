@@ -3,13 +3,15 @@ export const siteConfig = {
   title: "Shreyans Jain | Portfolio",
   tagline: "Full-Stack Developer, Cybersecurity Enthusiast & IoT Builder",
   description:
-    "Personal portfolio of Shreyans Jain — Computer Science Student, Full-Stack Developer, Cybersecurity Enthusiast, and IoT Creator built with Next.js, Framer Motion, and Neo-Brutalist design.",
+    "Computer Science & Engineering student building scalable full-stack applications, real-time secure web systems, machine learning solutions, and IoT devices.",
+  avatarPath: "./avatar.png",
+  avatarAlt: "Shreyans Jain, manga-style avatar",
   resumePath: "./resume.pdf",
   socials: {
-    linkedin: "https://linkedin.com/in/shreyansdev",
+    linkedin: "https://www.linkedin.com/in/shreyansdev/",
     github: "https://github.com/shreyansdev",
     email: "mailto:shreyans048@gmail.com",
-    phone: "tel:6299617062",
+    phone: "tel:+916299617062",
     displayEmail: "shreyans048@gmail.com",
     displayPhone: "+91 6299617062",
   },

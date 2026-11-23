@@ -1,107 +1,114 @@
-# ⚡ Portfolio Website — Shreyans Jain
+# Shreyans Jain — Portfolio Website
 
-A high-contrast, interactive **Neo-Brutalist Portfolio** built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**. Designed to highlight projects in Full-Stack Development, Cybersecurity, Machine Learning, and IoT/Hardware.
+Personal portfolio website for Shreyans Jain, a Computer Science & Engineering undergraduate at Acharya Institute of Technology, Bengaluru. The site is designed with a manga aesthetic featuring screentone halftones, angled panel borders, kanji chapter seals, light/dark mode support, and spring-based animations.
 
-🌐 **Live Demo:** [https://shreyansdev.github.io/portfolio_website/](https://shreyansdev.github.io/portfolio_website/)
-
----
-
-## 🎨 Features
-
-- **Neo-Brutalist Design Aesthetics**: Bold borders, vivid accent colors, stark contrast, retro badge elements, and clean typography.
-- **Fluid Motion & Animations**: Interactive hover effects, smooth scroll navigation, and entrance animations powered by Framer Motion.
-- **Dynamic Content Architecture**: Fully typed content configuration (`content/resumeData.ts`) powering Hero, About, Skills, Projects, Experience, and Contact sections.
-- **Optimized Static Export**: Built for maximum performance and instant page loads via Next.js static export.
-- **Automated CI/CD Pipeline**: GitHub Actions workflow automatically builds and deploys updates to GitHub Pages on every push.
+**Live URL:** [https://shreyansdev.github.io/portfolio_website/](https://shreyansdev.github.io/portfolio_website/)
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router, Static Export)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Deployment**: [GitHub Pages](https://pages.github.com/) & GitHub Actions
+- **Framework**: Next.js 14 (App Router, Static HTML Export)
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 3
+- **Animations**: Framer Motion 11 (`LazyMotion`, `domAnimation`, `MotionConfig`)
+- **Icons**: Lucide React
+- **Deployment**: GitHub Pages via GitHub Actions
 
 ---
 
-## 📂 Directory Structure
+## Directory Structure
 
 ```
 portfolio_website/
 ├── app/
-│   ├── globals.css         # Custom utility styles & font configuration
-│   ├── layout.tsx          # Root layout with site metadata & Navbar
-│   └── page.tsx            # Main page assembling all portfolio sections
+│   ├── apple-icon.png         # File-based Apple touch icon (180x180)
+│   ├── favicon.ico            # File-based multi-resolution icon (16, 32, 48 px)
+│   ├── globals.css            # CSS variables for light/dark mode, manga utilities
+│   ├── layout.tsx             # Root layout, metadata, font loading, ThemeProvider
+│   └── page.tsx               # Main page assembling section templates
 ├── content/
-│   └── resumeData.ts       # Structured portfolio content data
+│   ├── resumeData.ts          # Structured resume data (education, skills, projects, certs)
+│   └── siteContent.ts         # Manga copy, chapter seals, headings, sound effects
 ├── public/
-│   └── resume.pdf          # Downloadable resume asset
+│   ├── avatar.png             # Avatar source image
+│   └── resume.pdf             # Downloadable resume document
 ├── theme/
-│   ├── components/         # Reusable UI primitives (Card, Badge, AnimatedSection)
-│   ├── functions/          # Helper utilities & animation configurations
-│   ├── partials/           # Navbar, ResumeButton, SocialLinks
-│   └── templates/          # Portfolio section components (Hero, About, Skills, Projects, etc.)
+│   ├── components/            # Manga UI primitives (Panel, ChapterHeading, Tag, etc.)
+│   │   └── anim/              # Lightweight client animation wrappers
+│   ├── context/               # ThemeContext (View Transitions API) & MotionProvider
+│   ├── functions/             # Animation variants (animations.ts) & siteConfig.ts
+│   ├── partials/              # Navbar, ThemeToggle, ResumeButton, SocialLinks
+│   └── templates/             # Sections: Hero, About, Skills, Experience, Projects, ContactFooter
 ├── .github/workflows/
-│   └── deploy.yml          # GitHub Actions deployment workflow
-├── next.config.mjs         # Next.js static export configuration
-├── tailwind.config.ts      # Custom Neo-Brutalist color scheme & utilities
-└── package.json
+│   └── deploy.yml             # GitHub Actions deployment workflow
+├── next.config.mjs            # Next.js static export configuration
+├── package.json               # Project manifest
+└── tailwind.config.ts         # Tailwind configuration mapped to CSS variables
 ```
 
 ---
 
-## 🚀 Local Development
+## Editing Site Content
 
-Follow these steps to run the portfolio locally on your machine:
+All text, projects, and credentials are decoupled from presentation templates and managed across three files:
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/shreyansdev/portfolio_website.git
-   cd portfolio_website
-   ```
+1. **`content/resumeData.ts`**:
+   - `personalInfo`: Name, bio, tagline, contact details.
+   - `education`: Academic history, institutions, dates, scores, and details.
+   - `skillCategories`: Toolkit grouped by category.
+   - `projects`: Project titles, years, tech stacks, GitHub links, and bullet descriptions.
+   - `certifications`: Professional licenses and NPTEL achievements.
+   - `coursework`: Core academic subjects.
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+2. **`content/siteContent.ts`**:
+   - Chapter numbering, kanji seals (`二`, `三`, `四`, `五`, `六`), and Japanese text strips.
+   - Section subheadings, pull quotes, stat labels, and button labels.
+   - Katakana sound effects (`ドン`, `ゴゴゴ`) and decorative text.
 
-3. **Start the local development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
-
-4. **Build for production (Static Export):**
-   ```bash
-   npm run build
-   ```
-   This generates the static output in the `out/` directory.
+3. **`theme/functions/siteConfig.ts`**:
+   - Navigation links and anchors (`navItems`).
+   - Social profile URLs (LinkedIn, GitHub, email, phone).
+   - Global site metadata titles and descriptions.
 
 ---
 
-## 🚀 Deployment
+## Local Development
 
-This project uses **GitHub Actions** to automatically build and deploy the Next.js static export to **GitHub Pages**.
+### Prerequisites
 
-Whenever code is pushed to the `master` branch:
-1. The `.github/workflows/deploy.yml` workflow triggers automatically.
-2. Next.js compiles the site and exports static HTML/CSS/JS assets to `./out`.
-3. The artifacts are uploaded and deployed directly to GitHub Pages.
+- Node.js 18.17 or higher
+- npm 9 or higher
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/shreyansdev/portfolio_website.git
+cd portfolio_website
+
+# Install dependencies using the exact lockfile
+npm ci
+```
+
+### Running Locally
+
+```bash
+# Start the local development server at http://localhost:3000
+npm run dev
+```
+
+### Building for Production
+
+```bash
+# Type check and build static export to the out/ directory
+npm run build
+```
 
 ---
 
-## 👤 Author
+## Deployment
 
-**Shreyans Jain**
-- **GitHub**: [@shreyansdev](https://github.com/shreyansdev)
-- **LinkedIn**: [shreyansdev](https://linkedin.com/in/shreyansdev)
-- **Email**: shreyans048@gmail.com
-
----
-
-## 📜 License
-
-Distributed under the [MIT License](LICENSE).
+The website is statically generated and deployed to GitHub Pages via GitHub Actions:
+- The workflow is defined in [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
+- Every push to the `main` branch triggers `npm ci`, builds the static site via `npm run build`, and publishes the resulting `out/` folder to GitHub Pages.

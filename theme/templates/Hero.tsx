@@ -1,171 +1,152 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
-import { ArrowDown, Code2, ShieldAlert, Cpu, Sparkles, FolderGit2 } from "lucide-react";
 import { resumeData } from "../../content/resumeData";
+import { siteConfig } from "../functions/siteConfig";
+import { siteContent } from "../../content/siteContent";
+import { Tag } from "../components/Tag";
+import { BurstBubble } from "../components/BurstBubble";
 import { ResumeButton } from "../partials/ResumeButton";
 import { SocialLinks } from "../partials/SocialLinks";
-import { Badge } from "../components/Badge";
+import { TextMaskReveal } from "../components/anim/TextMaskReveal";
+import { AvatarParallax } from "../components/anim/AvatarParallax";
+import { Reveal } from "../components/anim/Reveal";
+import { Stagger, StaggerItem } from "../components/anim/Stagger";
 
 export const Hero: React.FC = () => {
-  return (
-    <section id="hero" className="relative pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden">
-      {/* Neo-brutalist Background Grid Patterns */}
-      <div className="absolute inset-0 bg-[radial-gradient(#0F0F0F_1px,transparent_1px)] [background-size:24px_24px] opacity-15 -z-10" />
+  const nameParts = resumeData.personalInfo.name.split(" ");
+  const firstName = nameParts[0].toUpperCase();
+  const lastName = nameParts.slice(1).join(" ").toUpperCase();
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  return (
+    <section id="hero" className="py-12 sm:py-16 lg:py-24 relative overflow-hidden">
+      <div className="w-[min(1180px,calc(100%-48px))] max-w-7xl mx-auto px-2 sm:px-4">
+        
+        {/* Main Grid: 2-column on desktop (lg), stacked on mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Main Hero Copy (Left Column - 7 cols) */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
+          {/* Left Column: Intro Copy (7 cols on lg, order-1 on mobile) */}
+          <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-6 relative z-10 order-1">
             
-            {/* Sticker Pills Row */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <Badge variant="yellow" size="sm" rotate="slight-left">
-                ⚡ AVAILABLE FOR HIRE
-              </Badge>
-              <Badge variant="cyan" size="sm" rotate="slight-right">
-                📍 BENGALURU, INDIA
-              </Badge>
-              <Badge variant="pink" size="sm" rotate="slight-left">
-                🎓 BE CS (2023 - 2027)
-              </Badge>
-            </div>
+            {/* Chips Row (Fades in after) */}
+            <Reveal delay={0.2}>
+              <div className="flex flex-wrap gap-2">
+                {siteContent.hero.chips.map((chip) => (
+                  <Tag key={chip} variant="chip">
+                    {chip}
+                  </Tag>
+                ))}
+              </div>
+            </Reveal>
 
-            {/* Headline */}
-            <div className="flex flex-col gap-2">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="font-mono font-black text-4xl sm:text-6xl lg:text-7xl tracking-tighter text-ink leading-[1.05]"
-              >
-                HI, I&apos;M{" "}
-                <span className="bg-neo-yellow px-3 border-4 border-ink inline-block shadow-brutal -rotate-1 hover:rotate-0 transition-transform">
-                  {resumeData.personalInfo.name.toUpperCase()}
-                </span>
-              </motion.h1>
+            {/* Display Headline with Masked Slide-up */}
+            <TextMaskReveal
+              className="font-display text-[52px] sm:text-[76px] lg:text-[96px] leading-[0.95] text-ink-new uppercase tracking-normal"
+              lines={[
+                {
+                  text: siteContent.hero.titlePrefix,
+                  className: "text-muted text-[42px] sm:text-[60px] lg:text-[76px]",
+                },
+                { text: firstName },
+                { text: lastName },
+              ]}
+            />
 
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-mono font-bold text-xl sm:text-2xl lg:text-3xl text-ink bg-neo-cyan/40 px-3 py-1 border-2 border-ink inline-self-start shadow-brutal-sm mt-2"
-              >
+            {/* Subheading / Tagline */}
+            <Reveal delay={0.35}>
+              <p className="font-semibold text-lg sm:text-xl text-ink-new">
                 {resumeData.personalInfo.tagline}
-              </motion.h2>
-            </div>
+              </p>
+            </Reveal>
 
             {/* Bio Paragraph */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-base sm:text-lg text-ink-muted font-sans font-medium max-w-2xl border-l-4 border-ink pl-4 py-1 bg-white/70"
-            >
-              {resumeData.personalInfo.bio}
-            </motion.p>
+            <Reveal delay={0.4}>
+              <p className="text-muted text-sm sm:text-base leading-relaxed max-w-[560px]">
+                {resumeData.personalInfo.bio}
+              </p>
+            </Reveal>
 
-            {/* CTAs Row */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-4 pt-2"
-            >
-              <ResumeButton variant="primary" size="lg" label="Download Resume" />
+            {/* Action Buttons Row */}
+            <Reveal delay={0.45}>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <ResumeButton className="btn" variant="solid" />
+                <a href="#projects" className="btn">
+                  {siteContent.buttons.viewProjects}
+                </a>
+              </div>
+            </Reveal>
 
-              <motion.a
-                href="#projects"
-                whileHover={{ scale: 1.04, boxShadow: "6px 6px 0px 0px #0F0F0F" }}
-                whileTap={{ scale: 0.96 }}
-                className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-ink font-mono font-black text-base uppercase border-4 border-ink shadow-brutal hover:bg-neo-lime transition-colors"
-              >
-                <FolderGit2 className="w-5 h-5" />
-                <span>View Projects</span>
-                <ArrowDown className="w-4 h-4" />
-              </motion.a>
-            </motion.div>
+            {/* Social Links Row */}
+            <Reveal delay={0.5}>
+              <div className="pt-2">
+                <SocialLinks variant="icons" />
+              </div>
+            </Reveal>
 
-            {/* Quick Social Bar */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="pt-4 flex items-center gap-4"
-            >
-              <span className="font-mono text-xs font-bold uppercase text-ink-muted">CONNECT:</span>
-              <SocialLinks size="sm" showLabels={true} />
-            </motion.div>
           </div>
 
-          {/* Right Column Visual Graphic Block (5 cols) */}
-          <div className="lg:col-span-5 flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
-              animate={{ opacity: 1, scale: 1, rotate: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative w-full max-w-md bg-neo-yellow border-4 border-ink p-6 shadow-brutal-xl"
+          {/* Right Column: Avatar Manga Art Frame with Slam & Mouse Parallax (5 cols on lg, order-2 on mobile) */}
+          <div className="lg:col-span-5 order-2 my-4 lg:my-0">
+            <AvatarParallax
+              sfxOne={siteContent.hero.sfx.one}
+              sfxTwo={siteContent.hero.sfx.two}
+              burstBubble={
+                <BurstBubble
+                  label={siteContent.hero.statBubble.label}
+                  value={siteContent.hero.statBubble.value}
+                  className="w-[115px] sm:w-[130px] h-[100px] sm:h-[115px] shadow-[3px_3px_0_var(--ink)]"
+                />
+              }
             >
-              {/* Terminal Title Bar */}
-              <div className="flex items-center justify-between border-b-4 border-ink pb-3 mb-6 bg-white p-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500 border border-ink" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500 border border-ink" />
-                  <div className="w-3 h-3 rounded-full bg-green-500 border border-ink" />
-                </div>
-                <span className="font-mono text-xs font-black uppercase tracking-wider">shreyans_sys.sh</span>
-                <Sparkles className="w-4 h-4 text-ink" />
-              </div>
-
-              {/* Interactive Info Cards inside Terminal */}
-              <div className="space-y-4 font-mono text-xs sm:text-sm">
-                <div className="bg-white border-2 border-ink p-3 shadow-brutal-sm flex items-center justify-between">
-                  <span className="flex items-center gap-2 font-bold">
-                    <Code2 className="w-4 h-4 text-blue-600" /> FULL-STACK
-                  </span>
-                  <span className="bg-neo-cyan px-2 py-0.5 border border-ink font-bold">React / Node / FastAPI</span>
-                </div>
-
-                <div className="bg-white border-2 border-ink p-3 shadow-brutal-sm flex items-center justify-between">
-                  <span className="flex items-center gap-2 font-bold">
-                    <ShieldAlert className="w-4 h-4 text-red-600" /> CYBERSECURITY
-                  </span>
-                  <span className="bg-neo-pink text-white px-2 py-0.5 border border-ink font-bold">AES / Nmap / Metasploit</span>
-                </div>
-
-                <div className="bg-white border-2 border-ink p-3 shadow-brutal-sm flex items-center justify-between">
-                  <span className="flex items-center gap-2 font-bold">
-                    <Cpu className="w-4 h-4 text-green-600" /> EMBEDDED / IoT
-                  </span>
-                  <span className="bg-neo-lime px-2 py-0.5 border border-ink font-bold">ESP32 / Arduino / WebSerial</span>
-                </div>
-
-                <div className="bg-white border-2 border-ink p-4 shadow-brutal-sm">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-bold">CURRENT DEGREE CGPA:</span>
-                    <span className="font-black text-sm bg-neo-yellow px-2 border border-ink">8.45 / 10.0</span>
-                  </div>
-                  <div className="w-full bg-gray-200 border border-ink h-3 overflow-hidden">
-                    <div className="bg-neo-pink h-full w-[84.5%]" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Sticker Stamp */}
-              <motion.div
-                animate={{ rotate: [ -5, 5, -5 ] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute -bottom-6 -right-6 bg-neo-pink text-white border-4 border-ink px-4 py-2 font-mono font-black text-xs uppercase shadow-brutal rotate-6"
+              {/* Neutral Grey Silhouette Fallback Layer */}
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center text-muted z-0 pointer-events-none select-none"
+                aria-hidden="true"
               >
-                100% BUILDER MODE 🚀
-              </motion.div>
-            </motion.div>
+                <div className="silhouette" />
+                <span className="font-mono text-[10px] mt-2 text-ink-new opacity-80">
+                  SHREYANS JAIN
+                </span>
+              </div>
+
+              {/* Plain Image */}
+              <img
+                src={siteConfig.avatarPath}
+                alt={siteConfig.avatarAlt}
+                className="w-full h-full object-cover object-[center_30%] relative z-10 pointer-events-none"
+              />
+            </AvatarParallax>
           </div>
 
         </div>
+
+        {/* Hero Mini Summary Panels (Staggered on entrance) */}
+        <Stagger
+          stagger={0.1}
+          delay={0.3}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-10 sm:mt-12 pt-6 border-t-2 border-line"
+        >
+          {siteContent.hero.summaryPanels.map((panel, idx) => (
+            <StaggerItem key={idx}>
+              <div className="mini-panel-fold border-2 border-line p-3.5 sm:p-4 bg-paper relative min-h-[88px] sm:min-h-[96px] flex flex-col justify-center">
+                <strong className="font-display text-base sm:text-lg uppercase block text-ink-new leading-tight">
+                  {panel.title}
+                </strong>
+                <span className="font-mono text-[10px] sm:text-[11px] leading-relaxed block mt-1 text-muted">
+                  {panel.skills}
+                </span>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+
       </div>
+
+      {/* Hero Chapter Vertical Japanese Tag */}
+      <span
+        className="vertical-jp absolute right-2 sm:right-4 top-[120px] text-muted text-xs opacity-60 hidden md:block pointer-events-none select-none"
+        aria-hidden="true"
+      >
+        {siteContent.hero.chapter.verticalJp}
+      </span>
     </section>
   );
 };
