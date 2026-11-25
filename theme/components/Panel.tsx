@@ -10,6 +10,7 @@ interface PanelProps {
   cutCorner?: boolean;
   className?: string;
   animateOnScroll?: boolean;
+  overlay?: React.ReactNode;
 }
 
 export const Panel: React.FC<PanelProps> = ({
@@ -18,24 +19,49 @@ export const Panel: React.FC<PanelProps> = ({
   cutCorner = true,
   className = "",
   animateOnScroll = true,
+  overlay,
 }) => {
   const bgClass = variant === "tone" ? "bg-tone" : "bg-paper";
-  const cutClass = cutCorner ? "cut-corner-panel" : "";
+  const stretchClass = className.includes("h-full") ? "h-full" : "";
+
+  const panelBody = (
+    <div className={`panel-hover-lift relative ${stretchClass}`}>
+      <div className={`panel-drop-shadow ${stretchClass}`}>
+        {cutCorner ? (
+          <div
+            className={`bg-line cut-corner-panel p-[2px] transition-colors ${stretchClass}`}
+          >
+            <div
+              className={`${bgClass} cut-corner-panel-inner p-6 relative transition-colors ${className}`}
+            >
+              {children}
+            </div>
+          </div>
+        ) : (
+          <div
+            className={`border-2 border-line ${bgClass} p-6 relative transition-[border-color,background-color] ${className}`}
+          >
+            {children}
+          </div>
+        )}
+      </div>
+      {overlay}
+    </div>
+  );
+
+  if (!animateOnScroll) {
+    return <div className={stretchClass}>{panelBody}</div>;
+  }
 
   return (
     <m.div
-      initial={animateOnScroll ? "hidden" : undefined}
-      whileInView={animateOnScroll ? "visible" : undefined}
-      viewport={animateOnScroll ? defaultViewport : undefined}
+      initial="hidden"
+      whileInView="visible"
+      viewport={defaultViewport}
       variants={revealVariants}
-      whileHover={{
-        y: -4,
-        boxShadow: "7px 7px 0 var(--ink)",
-        transition: { duration: 0.15 },
-      }}
-      className={`border-2 border-line ${bgClass} ${cutClass} p-6 relative transition-[border-color,background-color] ${className}`}
+      className={stretchClass}
     >
-      {children}
+      {panelBody}
     </m.div>
   );
 };

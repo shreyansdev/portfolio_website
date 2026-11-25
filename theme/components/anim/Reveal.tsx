@@ -8,14 +8,27 @@ interface RevealProps extends HTMLMotionProps<"div"> {
   children: React.ReactNode;
   delay?: number;
   className?: string;
+  cssEntrance?: boolean;
 }
 
 export const Reveal: React.FC<RevealProps> = ({
   children,
   delay = 0,
   className = "",
+  cssEntrance = false,
   ...props
 }) => {
+  if (cssEntrance) {
+    return (
+      <div
+        className={`hero-reveal ${className}`}
+        style={{ animationDelay: `${delay}s` }}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <m.div
       initial="hidden"

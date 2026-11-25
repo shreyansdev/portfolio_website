@@ -54,7 +54,7 @@ export const Skills: React.FC = () => {
         {/* Wide Specialization Banner */}
         <Reveal delay={0.2}>
           <div className="mt-4 sm:mt-5 p-5 sm:p-6 border-[3px] border-line bg-tone relative pr-24 sm:pr-28">
-            <div className="font-mono text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-muted mb-1 font-medium">
+            <div className="font-mono text-xs tracking-[0.12em] uppercase text-muted mb-1 font-medium">
               {siteContent.skills.cybersecurityBanner.kicker}
             </div>
             <h3 className="font-display text-xl sm:text-2xl uppercase text-ink-new leading-tight">

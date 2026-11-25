@@ -4,6 +4,7 @@
 
 :root,
 html[data-theme="light"] {
+  color-scheme: light;
   --paper: #ffffff;
   --ink: #0a0a0a;
   --tone: #ededed;
@@ -15,6 +16,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
+  color-scheme: dark;
   --paper: #0a0a0a;
   --ink: #ffffff;
   --tone: #1a1a1a;
@@ -29,6 +31,8 @@ html[data-theme="dark"] {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 90px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ink) var(--paper);
   }
   body {
     background-color: var(--paper);
@@ -64,6 +68,68 @@ html[data-theme="dark"] {
   background: var(--muted);
 }
 
+/* Reusable Manga Buttons */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border: 2px solid var(--ink);
+    font-family: var(--font-dm-mono), "DM Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .btn.solid {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .btn.small {
+    padding: 9px 12px;
+  }
+  @media (pointer: coarse) {
+    .btn {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  .skip-link {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border-width: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    width: auto;
+    height: auto;
+    padding: 12px 18px;
+    border-width: 2px;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
 /* Reusable Manga Utility Classes and Effects */
 @layer utilities {
   .halftone {
@@ -78,6 +144,21 @@ html[data-theme="dark"] {
   .cut-corner-panel {
     clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
   }
+  .cut-corner-panel-inner {
+    clip-path: polygon(0 0, calc(100% - 14.83px) 0, 100% 14.83px, 100% 100%, 10.83px 100%, 0 calc(100% - 10.83px));
+  }
+  .panel-hover-lift {
+    transition: transform 0.15s ease;
+  }
+  .panel-hover-lift:hover {
+    transform: translateY(-4px);
+  }
+  .panel-drop-shadow {
+    transition: filter 0.15s ease;
+  }
+  .panel-hover-lift:hover .panel-drop-shadow {
+    filter: drop-shadow(7px 7px 0 var(--ink));
+  }
   .vertical-jp {
     writing-mode: vertical-rl;
     font-family: var(--font-dm-mono), monospace;
@@ -85,10 +166,23 @@ html[data-theme="dark"] {
   }
   .profile-frame {
     border: 4px solid var(--ink);
-    background: var(--tone);
-    transform: rotate(3deg);
+    background: var(--paper);
+    transform: rotate(2.2deg);
     clip-path: polygon(0 0, 100% 0, 100% 91%, 91% 100%, 0 100%);
-    box-shadow: 12px 12px 0 var(--ink);
+  }
+
+  /* Theme-aware Avatar Variants */
+  .avatar-img-light {
+    display: block;
+  }
+  .avatar-img-dark {
+    display: none;
+  }
+  html[data-theme="dark"] .avatar-img-light {
+    display: none;
+  }
+  html[data-theme="dark"] .avatar-img-dark {
+    display: block;
   }
 
   /* Neutral Grey Silhouette */
@@ -159,38 +253,6 @@ html[data-theme="dark"] {
     pointer-events: none;
   }
 
-  /* Reusable Manga Buttons */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 18px;
-    border: 2px solid var(--ink);
-    font-family: var(--font-dm-mono), "DM Mono", monospace;
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    transition: transform 0.2s, box-shadow 0.2s;
-    background: var(--paper);
-    color: var(--ink);
-  }
-  .btn:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: 4px 4px 0 var(--ink);
-  }
-  .btn:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 var(--ink);
-  }
-  .btn.solid {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .btn.small {
-    padding: 9px 12px;
-  }
-
   /* Manga End Word in Footer */
   .end-word {
     font-family: var(--font-anton), Anton, Impact, sans-serif;
@@ -250,9 +312,131 @@ html[data-theme="dark"] {
   }
 }
 
+/* Hero CSS-Only Entrance Animations (visible without JS) */
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-reveal {
+  animation: heroReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes heroTextMask {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-text-mask {
+  animation: heroTextMask 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes heroToneIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.hero-tone-in {
+  animation: heroToneIn 0.4s ease 0.15s backwards;
+}
+
+@keyframes heroAvatarSlam {
+  from {
+    opacity: 0;
+    transform: scale(1.06) rotate(-2deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(2.2deg);
+  }
+}
+.hero-avatar-slam {
+  animation: heroAvatarSlam 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes heroBurstPop {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-12deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.05) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(-5deg);
+  }
+}
+.hero-burst-pop {
+  transform: rotate(-5deg);
+  animation: heroBurstPop 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.1s backwards;
+}
+
+@keyframes heroSfxShake {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateX(0);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1) translateX(-3px);
+  }
+  45% {
+    transform: scale(1) translateX(3px);
+  }
+  65% {
+    transform: scale(1) translateX(-2px);
+  }
+  85% {
+    transform: scale(1) translateX(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+.hero-sfx-shake {
+  animation: heroSfxShake 0.45s ease-out backwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .focus-lines-spin {
+  html,
+  html.scroll-smooth {
+    scroll-behavior: auto;
+  }
+  .focus-lines-spin,
+  .hero-reveal,
+  .hero-text-mask,
+  .hero-tone-in,
+  .hero-avatar-slam,
+  .hero-burst-pop,
+  .hero-sfx-shake {
     animation: none;
+  }
+  .panel-hover-lift,
+  .btn {
+    transition: none;
+  }
+  .panel-hover-lift:hover,
+  .btn:hover,
+  .btn:active {
+    transform: none;
   }
 }
 

@@ -13,12 +13,15 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
     setMounted(true);
   }, []);
 
+  const toggleLabel =
+    mounted && theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+
   return (
     <button
       type="button"
       onClick={(e) => toggleTheme(e)}
-      aria-label="Toggle theme"
-      className={`w-[42px] h-[42px] border-[1.5px] border-line bg-transparent grid place-items-center text-ink-new hover:bg-tone transition-colors cursor-pointer overflow-hidden relative ${className}`}
+      aria-label={toggleLabel}
+      className={`flex-none w-[44px] h-[44px] border-[1.5px] border-line bg-transparent grid place-items-center text-ink-new hover:bg-tone transition-colors cursor-pointer overflow-hidden relative ${className}`}
     >
       <AnimatePresence mode="wait" initial={false}>
         {mounted && theme === "dark" ? (
@@ -30,7 +33,7 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
             transition={{ duration: 0.2 }}
             className="flex items-center justify-center"
           >
-            <Sun className="w-[19px] h-[19px]" />
+            <Sun className="w-[19px] h-[19px]" aria-hidden="true" focusable="false" />
           </m.div>
         ) : (
           <m.div
@@ -41,7 +44,7 @@ export const ThemeToggle: React.FC<{ className?: string }> = ({ className = "" }
             transition={{ duration: 0.2 }}
             className="flex items-center justify-center"
           >
-            <Moon className="w-[19px] h-[19px]" />
+            <Moon className="w-[19px] h-[19px]" aria-hidden="true" focusable="false" />
           </m.div>
         )}
       </AnimatePresence>

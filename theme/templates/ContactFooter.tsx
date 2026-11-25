@@ -6,6 +6,7 @@ import { resumeData } from "../../content/resumeData";
 import { siteConfig } from "../functions/siteConfig";
 import { siteContent } from "../../content/siteContent";
 import { ChapterHeading } from "../components/ChapterHeading";
+import { AvatarImage } from "../components/AvatarImage";
 import { ResumeButton } from "../partials/ResumeButton";
 import { SocialLinks } from "../partials/SocialLinks";
 import {
@@ -17,6 +18,7 @@ import {
 
 export const ContactFooter: React.FC = () => {
   const [copyText, setCopyText] = useState<string>(siteContent.buttons.copyEmail);
+  const [copyStatus, setCopyStatus] = useState<string>("");
 
   const handleCopyEmail = async () => {
     try {
@@ -33,10 +35,15 @@ export const ContactFooter: React.FC = () => {
         document.execCommand("copy");
         document.body.removeChild(textarea);
       }
-      setCopyText("Copied");
-      setTimeout(() => setCopyText(siteContent.buttons.copyEmail), 2500);
+      setCopyText(siteContent.buttons.copiedEmail);
+      setCopyStatus("Email address copied to clipboard");
+      setTimeout(() => {
+        setCopyText(siteContent.buttons.copyEmail);
+        setCopyStatus("");
+      }, 2500);
     } catch {
       setCopyText(siteConfig.socials.displayEmail);
+      setCopyStatus(siteConfig.socials.displayEmail);
     }
   };
 
@@ -68,9 +75,9 @@ export const ContactFooter: React.FC = () => {
               variants={revealVariants}
               className="lg:col-span-7 flex flex-col"
             >
-              <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl text-ink-new uppercase tracking-tight leading-none mb-4">
+              <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl text-ink-new uppercase tracking-tight leading-none mb-4">
                 {siteContent.contact.calloutHeading}
-              </h2>
+              </h3>
 
               <p className="font-sans text-muted text-sm sm:text-base leading-relaxed max-w-xl mb-6">
                 {siteContent.contact.calloutText}
@@ -93,6 +100,9 @@ export const ContactFooter: React.FC = () => {
                 >
                   {copyText}
                 </button>
+                <span className="sr-only" aria-live="polite" aria-atomic="true">
+                  {copyStatus}
+                </span>
 
                 <ResumeButton className="btn" />
               </div>
@@ -110,32 +120,38 @@ export const ContactFooter: React.FC = () => {
               viewport={defaultViewport}
               variants={revealVariants}
               transition={{ delay: 0.15 }}
-              className="lg:col-span-5 border-2 border-line p-6 bg-tone relative"
+              className="lg:col-span-5 border-2 border-line p-6 pb-16 bg-tone relative"
             >
               <div className="divide-y divide-line">
                 {/* Email Row */}
-                <div className="py-3 flex items-start gap-4">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-muted min-w-[75px] sm:min-w-[85px] pt-0.5">
+                <div className="py-1.5 flex items-center gap-4">
+                  <span className="font-mono text-xs uppercase tracking-wider text-muted min-w-[85px] sm:min-w-[92px]">
                     {siteContent.contact.labels.email}
                   </span>
-                  <strong className="text-xs sm:text-sm font-semibold text-ink-new break-all font-sans">
+                  <a
+                    href={siteConfig.socials.email}
+                    className="text-xs sm:text-sm font-semibold text-ink-new break-all font-sans hover:underline focus-visible:underline min-h-[44px] min-w-[44px] inline-flex items-center"
+                  >
                     {siteConfig.socials.displayEmail}
-                  </strong>
+                  </a>
                 </div>
 
                 {/* Phone Row */}
-                <div className="py-3 flex items-start gap-4">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-muted min-w-[75px] sm:min-w-[85px] pt-0.5">
+                <div className="py-1.5 flex items-center gap-4">
+                  <span className="font-mono text-xs uppercase tracking-wider text-muted min-w-[85px] sm:min-w-[92px]">
                     {siteContent.contact.labels.phone}
                   </span>
-                  <strong className="text-xs sm:text-sm font-semibold text-ink-new break-all font-sans">
+                  <a
+                    href={siteConfig.socials.phone}
+                    className="text-xs sm:text-sm font-semibold text-ink-new break-all font-sans hover:underline focus-visible:underline min-h-[44px] min-w-[44px] inline-flex items-center"
+                  >
                     {siteConfig.socials.displayPhone}
-                  </strong>
+                  </a>
                 </div>
 
                 {/* Location Row */}
-                <div className="py-3 flex items-start gap-4">
-                  <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-wider text-muted min-w-[75px] sm:min-w-[85px] pt-0.5">
+                <div className="py-3 flex items-center gap-4">
+                  <span className="font-mono text-xs uppercase tracking-wider text-muted min-w-[85px] sm:min-w-[92px]">
                     {siteContent.contact.labels.location}
                   </span>
                   <strong className="text-xs sm:text-sm font-semibold text-ink-new break-all font-sans">
@@ -231,12 +247,8 @@ export const ContactFooter: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-line text-xs font-mono">
             {/* Circular Avatar + Author Name */}
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 border-2 border-line rounded-full overflow-hidden bg-tone shrink-0">
-                <img
-                  src={siteConfig.avatarPath}
-                  alt={siteConfig.avatarAlt}
-                  className="w-full h-full object-cover object-[center_30%]"
-                />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 border-2 border-line rounded-full overflow-hidden bg-paper shrink-0">
+                <AvatarImage size="160" className="w-full h-full" />
               </div>
               <strong className="font-display text-xl sm:text-2xl tracking-wider text-ink-new">
                 {resumeData.personalInfo.name.toUpperCase()}
@@ -244,16 +256,16 @@ export const ContactFooter: React.FC = () => {
             </div>
 
             {/* Copyright Line */}
-            <span className="text-muted text-[10px] sm:text-xs text-center">
+            <span className="text-muted text-xs text-center">
               {siteContent.footer.copyright}
             </span>
 
             {/* Back to top Link */}
             <a
               href="#hero"
-              className="text-ink-new hover:underline uppercase text-xs font-medium"
+              className="text-ink-new hover:underline uppercase text-xs font-medium inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-2"
             >
-              Back to top ↑
+              {siteContent.buttons.backToTop}
             </a>
           </div>
 

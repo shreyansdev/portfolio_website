@@ -18,6 +18,19 @@ interface ChapterHeadingProps {
   className?: string;
 }
 
+const renderEyebrow = (text: string) => {
+  const parts = text.split(/([\u3000-\u30ff\u4e00-\u9faf]+)/g);
+  return parts.map((part, idx) =>
+    /[\u3000-\u30ff\u4e00-\u9faf]/.test(part) ? (
+      <span key={idx} lang="ja">
+        {part}
+      </span>
+    ) : (
+      <React.Fragment key={idx}>{part}</React.Fragment>
+    )
+  );
+};
+
 export const ChapterHeading: React.FC<ChapterHeadingProps> = ({
   seal,
   eyebrow,
@@ -35,6 +48,8 @@ export const ChapterHeading: React.FC<ChapterHeadingProps> = ({
           whileInView="visible"
           viewport={defaultViewport}
           variants={sealVariants}
+          aria-hidden="true"
+          lang="ja"
           className="w-[60px] h-[60px] sm:w-[76px] sm:h-[76px] border-[3px] border-line rounded-full grid place-items-center font-serif text-3xl sm:text-[44px] shrink-0 relative bg-paper text-ink-new"
         >
           <span className="relative z-10 leading-none">{seal}</span>
@@ -48,14 +63,14 @@ export const ChapterHeading: React.FC<ChapterHeadingProps> = ({
           viewport={defaultViewport}
           variants={titleWipeVariants}
         >
-          <div className="font-mono text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-muted mb-1 sm:mb-2">
-            {eyebrow}
+          <div className="font-mono text-xs tracking-[0.12em] uppercase text-muted mb-1 sm:mb-2">
+            {renderEyebrow(eyebrow)}
           </div>
           <h2 className="font-display text-[38px] sm:text-[54px] lg:text-[72px] leading-[0.95] uppercase text-ink-new">
             {title}
           </h2>
           {kicker && (
-            <div className="font-mono text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-muted mt-2">
+            <div className="font-mono text-xs tracking-[0.08em] uppercase text-muted mt-2">
               {kicker}
             </div>
           )}
@@ -70,7 +85,9 @@ export const ChapterHeading: React.FC<ChapterHeadingProps> = ({
           viewport={defaultViewport}
           variants={fadeIn}
           transition={{ delay: 0.2 }}
-          className="vertical-jp absolute right-0 sm:right-3 top-[-10px] text-muted text-[10px] sm:text-xs opacity-70 hidden sm:block pointer-events-none"
+          aria-hidden="true"
+          lang="ja"
+          className="vertical-jp absolute right-0 sm:right-3 top-[-10px] text-muted text-xs opacity-70 hidden sm:block pointer-events-none"
         >
           {verticalJp}
         </m.span>

@@ -83,7 +83,7 @@ export const Experience: React.FC = () => {
                 <p className="font-semibold text-base sm:text-lg text-ink-new mb-3 leading-snug">
                   &ldquo;{siteContent.education.quote.text}&rdquo;
                 </p>
-                <cite className="font-mono text-[11px] uppercase text-muted not-italic block">
+                <cite className="font-mono text-xs uppercase text-muted not-italic block">
                   {siteContent.education.quote.attribution}
                 </cite>
               </SpeechBubble>
@@ -94,7 +94,7 @@ export const Experience: React.FC = () => {
               {resumeData.certifications.map((cert, idx) => (
                 <StaggerItem key={idx}>
                   <div className="halftone-corner border-2 border-line p-4 sm:p-5 relative bg-paper">
-                    <div className="font-mono text-[10px] uppercase text-muted">
+                    <div className="font-mono text-xs uppercase text-muted">
                       {cert.issuer} · {cert.year}
                     </div>
                     <h4 className="font-display text-lg sm:text-xl uppercase text-ink-new mt-1 mb-1">
@@ -125,7 +125,11 @@ export const Experience: React.FC = () => {
                 >
                   <path d="M10 20h100M20 10h80M30 20v90m60-90v90M20 52h80M25 58h70M22 110h76" />
                 </svg>
-                <div className="stamp font-mono text-xs border-2 border-line px-2.5 py-1 inline-block -rotate-6 mt-4 bg-paper text-ink-new select-none">
+                <div
+                  className="stamp font-mono text-xs border-2 border-line px-2.5 py-1 inline-block -rotate-6 mt-4 bg-paper text-ink-new select-none"
+                  aria-hidden="true"
+                  lang="ja"
+                >
                   {siteContent.education.stamp}
                 </div>
               </div>

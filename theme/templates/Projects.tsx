@@ -50,8 +50,9 @@ export const Projects: React.FC = () => {
               <button
                 key={cat}
                 type="button"
+                aria-pressed={isActive}
                 onClick={() => setActiveFilter(cat)}
-                className={`font-mono text-[10px] sm:text-[11px] uppercase tracking-wider px-3.5 py-1.5 transition-all select-none border-2 cursor-pointer ${
+                className={`font-mono text-xs uppercase tracking-wider px-3.5 py-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center transition-all select-none border-2 cursor-pointer ${
                   isActive
                     ? "bg-ink-new text-paper border-line font-bold shadow-[2px_2px_0_var(--ink)]"
                     : "bg-paper text-ink-new border-line hover:bg-tone"
@@ -62,6 +63,12 @@ export const Projects: React.FC = () => {
             );
           })}
         </div>
+
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          Showing {filteredProjects.length}{" "}
+          {filteredProjects.length === 1 ? "project" : "projects"}
+          {activeFilter === siteContent.projects.filterAll ? "" : ` in ${activeFilter}`}
+        </p>
 
         {/* Projects Grid: Animated reflow with AnimatePresence & layout */}
         <m.div layout className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
@@ -83,40 +90,42 @@ export const Projects: React.FC = () => {
                   data-category={proj.category}
                   className="project-card border-2 border-line bg-paper min-h-full overflow-hidden"
                 >
-                  <CardTilt className="grid grid-cols-1 md:grid-cols-12 min-h-full">
-                    {/* Volume Art Cover (Left side on tablet/desktop) */}
-                    <div className="md:col-span-5 bg-tone border-b-2 md:border-b-0 md:border-r-2 border-line relative min-h-[220px] md:min-h-full flex items-center justify-center p-4 overflow-hidden">
-                      {/* Dark Manga Book Spine */}
-                      <span
-                        className="spine absolute left-0 top-0 bottom-0 w-2.5 bg-line z-10"
-                        aria-hidden="true"
-                      />
-
-                      {/* Volume Number Tag */}
-                      <span className="vol-number absolute left-4 top-3 font-mono text-[11px] font-bold text-ink-new z-10">
-                        {siteContent.projects.volumePrefix} {volNum}
-                      </span>
-
-                      {/* Halftone Screentone Backdrop */}
-                      <div
-                        className="absolute inset-0 halftone opacity-60 pointer-events-none"
-                        aria-hidden="true"
-                      />
-
-                      {/* Bespoke Cover Art SVG */}
-                      <div className="relative w-full max-w-[160px] sm:max-w-[180px] z-[5] text-ink-new">
-                        <ProjectCoverArt
-                          title={proj.title}
-                          ariaLabel={siteContent.projects.volumeAriaLabels[proj.title]}
+                  <div className="grid grid-cols-1 md:grid-cols-12 min-h-full">
+                    {/* Volume Art Cover (Left side on tablet/desktop, tilted on hover) */}
+                    <div className="md:col-span-5 bg-tone border-b-2 md:border-b-0 md:border-r-2 border-line overflow-hidden">
+                      <CardTilt className="relative min-h-[220px] md:min-h-full flex items-center justify-center p-4">
+                        {/* Dark Manga Book Spine */}
+                        <span
+                          className="spine absolute left-0 top-0 bottom-0 w-2.5 bg-line z-10"
+                          aria-hidden="true"
                         />
-                      </div>
+
+                        {/* Volume Number Tag */}
+                        <span className="vol-number absolute left-4 top-3 font-mono text-xs font-bold text-ink-new z-10">
+                          {siteContent.projects.volumePrefix} {volNum}
+                        </span>
+
+                        {/* Halftone Screentone Backdrop */}
+                        <div
+                          className="absolute inset-0 halftone opacity-60 pointer-events-none"
+                          aria-hidden="true"
+                        />
+
+                        {/* Bespoke Cover Art SVG */}
+                        <div className="relative w-full max-w-[160px] sm:max-w-[180px] z-[5] text-ink-new">
+                          <ProjectCoverArt
+                            title={proj.title}
+                            ariaLabel={siteContent.projects.volumeAriaLabels[proj.title]}
+                          />
+                        </div>
+                      </CardTilt>
                     </div>
 
-                    {/* Project Information (Right side) */}
+                    {/* Project Information (Right side - stays flat for crisp text) */}
                     <div className="md:col-span-7 p-5 sm:p-6 flex flex-col justify-between">
                       <div>
                         {/* Volume Meta Tag */}
-                        <div className="font-mono text-[10px] uppercase tracking-wider text-muted mb-1.5 font-medium">
+                        <div className="font-mono text-xs uppercase tracking-wider text-muted mb-1.5 font-medium">
                           {siteContent.projects.volumePrefix} {volNum} · {proj.year} · {proj.category}
                         </div>
 
@@ -149,14 +158,14 @@ export const Projects: React.FC = () => {
                             href={proj.githubUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn self-start text-xs py-2 px-3.5 inline-flex"
+                            className="btn self-start text-xs py-2.5 px-3.5 min-h-[44px] min-w-[44px] inline-flex"
                           >
-                            View Repository
+                            {siteContent.buttons.viewRepository}
                           </a>
                         )}
                       </div>
                     </div>
-                  </CardTilt>
+                  </div>
                 </m.article>
               );
             })}

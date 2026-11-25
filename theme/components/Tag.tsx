@@ -13,8 +13,8 @@ export const Tag: React.FC<TagProps> = ({
 }) => {
   const styles =
     variant === "chip"
-      ? "font-mono text-[10px] px-2.5 py-1 border border-line uppercase leading-tight bg-paper text-ink-new inline-block select-none"
-      : "font-mono text-[10px] px-2 py-1 border border-line uppercase leading-tight bg-paper text-ink-new inline-block select-none";
+      ? "font-mono text-xs px-2.5 py-1 border border-line uppercase leading-tight bg-paper text-ink-new inline-block select-none"
+      : "font-mono text-xs px-2 py-1 border border-line uppercase leading-tight bg-paper text-ink-new inline-block select-none";
 
   return <span className={`${styles} ${className}`}>{children}</span>;
 };

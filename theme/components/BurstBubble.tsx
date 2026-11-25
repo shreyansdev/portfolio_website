@@ -13,18 +13,31 @@ export const BurstBubble: React.FC<BurstBubbleProps> = ({
 }) => {
   return (
     <div
-      className={`burst-bubble bg-paper border-2 border-line text-ink-new text-center p-3 select-none ${className}`}
-      style={{
-        clipPath:
-          "polygon(50% 0, 60% 16%, 78% 4%, 80% 24%, 100% 30%, 86% 48%, 100% 65%, 78% 70%, 82% 94%, 60% 84%, 48% 100%, 38% 82%, 16% 95%, 20% 72%, 0 62%, 15% 47%, 2% 27%, 25% 25%, 27% 4%, 43% 17%)",
-      }}
+      className={`burst-bubble relative inline-flex items-center justify-center text-ink-new select-none ${className}`}
     >
-      <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-wider block text-muted leading-tight">
-        {label}
-      </span>
-      <strong className="font-display text-sm sm:text-base md:text-lg block text-ink-new mt-0.5 leading-tight">
-        {value}
-      </strong>
+      <svg
+        viewBox="0 0 220 164"
+        className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
+        style={{ filter: "drop-shadow(3px 3px 0 var(--ink))" }}
+        aria-hidden="true"
+      >
+        <polygon
+          points="110,4 134,29 172,19 173,49 211,58 188,82 211,106 173,115 172,145 134,135 110,160 86,135 48,145 47,115 9,106 32,82 9,58 47,49 48,19 86,29"
+          fill="var(--paper)"
+          stroke="var(--ink)"
+          strokeWidth="2"
+          strokeLinejoin="miter"
+          vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-5">
+        <span className="font-mono text-xs uppercase tracking-[0.02em] block text-muted leading-[1.15] max-w-[134px]">
+          {label}
+        </span>
+        <strong className="font-display text-lg sm:text-xl block text-ink-new mt-1 leading-none whitespace-nowrap">
+          {value}
+        </strong>
+      </div>
     </div>
   );
 };

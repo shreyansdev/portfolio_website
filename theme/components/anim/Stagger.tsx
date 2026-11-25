@@ -9,6 +9,7 @@ interface StaggerProps extends HTMLMotionProps<"div"> {
   stagger?: number;
   delay?: number;
   className?: string;
+  cssEntrance?: boolean;
 }
 
 export const Stagger: React.FC<StaggerProps> = ({
@@ -16,8 +17,13 @@ export const Stagger: React.FC<StaggerProps> = ({
   stagger = 0.08,
   delay = 0,
   className = "",
+  cssEntrance = false,
   ...props
 }) => {
+  if (cssEntrance) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <m.div
       initial="hidden"
@@ -32,11 +38,28 @@ export const Stagger: React.FC<StaggerProps> = ({
   );
 };
 
-export const StaggerItem: React.FC<HTMLMotionProps<"div">> = ({
+interface StaggerItemProps extends HTMLMotionProps<"div"> {
+  children: React.ReactNode;
+  cssDelay?: number;
+}
+
+export const StaggerItem: React.FC<StaggerItemProps> = ({
   children,
   className = "",
+  cssDelay,
   ...props
 }) => {
+  if (cssDelay !== undefined) {
+    return (
+      <div
+        className={`hero-reveal ${className}`}
+        style={{ animationDelay: `${cssDelay}s` }}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <m.div variants={revealVariants} className={className} {...props}>
       {children}

@@ -11,7 +11,7 @@ Personal portfolio website for Shreyans Jain, a Computer Science & Engineering u
 - **Framework**: Next.js 14 (App Router, Static HTML Export)
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 3
-- **Animations**: Framer Motion 11 (`LazyMotion`, `domAnimation`, `MotionConfig`)
+- **Animations**: Framer Motion 11 (`LazyMotion`, `domMax`, `MotionConfig`) + pure CSS keyframe hero entrance
 - **Icons**: Lucide React
 - **Deployment**: GitHub Pages via GitHub Actions
 
@@ -24,19 +24,28 @@ portfolio_website/
 ├── app/
 │   ├── apple-icon.png         # File-based Apple touch icon (180x180)
 │   ├── favicon.ico            # File-based multi-resolution icon (16, 32, 48 px)
-│   ├── globals.css            # CSS variables for light/dark mode, manga utilities
-│   ├── layout.tsx             # Root layout, metadata, font loading, ThemeProvider
-│   └── page.tsx               # Main page assembling section templates
+│   ├── globals.css            # CSS variables for light/dark mode, manga utilities, hero keyframes
+│   ├── layout.tsx             # Root layout, viewport/canonical/JSON-LD metadata, fonts, skip link
+│   ├── page.tsx               # Main page assembling section templates
+│   ├── robots.ts              # Static robots.txt route (force-static)
+│   └── sitemap.ts             # Static sitemap.xml route (force-static)
+├── assets-src/
+│   ├── avatar-dark.png        # High-res dark-background avatar source
+│   └── avatar-light.png       # High-res light-background avatar source
 ├── content/
 │   ├── resumeData.ts          # Structured resume data (education, skills, projects, certs)
 │   └── siteContent.ts         # Manga copy, chapter seals, headings, sound effects
 ├── public/
-│   ├── avatar.png             # Avatar source image
+│   ├── avatar-dark-160.webp   # Optimized 160x160 dark avatar for circular badges
+│   ├── avatar-dark-800.webp   # Optimized 800x800 dark avatar for hero frame
+│   ├── avatar-light-160.webp  # Optimized 160x160 light avatar for circular badges
+│   ├── avatar-light-800.webp  # Optimized 800x800 light avatar for hero frame
+│   ├── og.png                 # 1200x630 monochrome Open Graph / Twitter share card
 │   └── resume.pdf             # Downloadable resume document
 ├── theme/
-│   ├── components/            # Manga UI primitives (Panel, ChapterHeading, Tag, etc.)
-│   │   └── anim/              # Lightweight client animation wrappers
-│   ├── context/               # ThemeContext (View Transitions API) & MotionProvider
+│   ├── components/            # Manga UI primitives (AvatarImage, BurstBubble, ChapterHeading, Panel, ProjectCoverArt, SpeechBubble, Tag)
+│   │   └── anim/              # Animation wrappers (AvatarParallax, CardTilt, Reveal, ScrollProgress, Stagger, TagStagger, TextMaskReveal, TimelineProgress)
+│   ├── context/               # ThemeContext (View Transitions API, OS/storage sync) & MotionProvider (domMax)
 │   ├── functions/             # Animation variants (animations.ts) & siteConfig.ts
 │   ├── partials/              # Navbar, ThemeToggle, ResumeButton, SocialLinks
 │   └── templates/             # Sections: Hero, About, Skills, Experience, Projects, ContactFooter
@@ -58,18 +67,18 @@ All text, projects, and credentials are decoupled from presentation templates an
    - `education`: Academic history, institutions, dates, scores, and details.
    - `skillCategories`: Toolkit grouped by category.
    - `projects`: Project titles, years, tech stacks, GitHub links, and bullet descriptions.
-   - `certifications`: Professional licenses and NPTEL achievements.
-   - `coursework`: Core academic subjects.
+   - `certifications`: Professional licenses and NPTEL achievements (rendered in Education).
+   - `coursework`: Core academic subjects (rendered in About).
 
 2. **`content/siteContent.ts`**:
-   - Chapter numbering, kanji seals (`二`, `三`, `四`, `五`, `六`), and Japanese text strips.
+   - Chapter numbering, kanji seals (`一`, `二`, `三`, `四`, `五`, `六`), and Japanese text strips.
    - Section subheadings, pull quotes, stat labels, and button labels.
    - Katakana sound effects (`ドン`, `ゴゴゴ`) and decorative text.
 
 3. **`theme/functions/siteConfig.ts`**:
    - Navigation links and anchors (`navItems`).
    - Social profile URLs (LinkedIn, GitHub, email, phone).
-   - Global site metadata titles and descriptions.
+   - Theme-specific avatar paths (`avatarLight800`, `avatarDark800`, `avatarLight160`, `avatarDark160`), `avatarAlt`, `resumePath`, and global metadata titles/descriptions.
 
 ---
 

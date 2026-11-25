@@ -2,12 +2,6 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { m, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
-import {
-  slamSpring,
-  popSpring,
-  sfxShakeVariants,
-  burstPopVariants,
-} from "../../functions/animations";
 
 interface AvatarParallaxProps {
   children: React.ReactNode;
@@ -24,7 +18,9 @@ export const AvatarParallax: React.FC<AvatarParallaxProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isPointerFine, setIsPointerFine] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const motionReduced = useReducedMotion();
+  const shouldReduceMotion = Boolean(motionReduced || prefersReduced);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -32,7 +28,16 @@ export const AvatarParallax: React.FC<AvatarParallaxProps> = ({
       setIsPointerFine(mq.matches);
       const listener = (e: MediaQueryListEvent) => setIsPointerFine(e.matches);
       mq.addEventListener("change", listener);
-      return () => mq.removeEventListener("change", listener);
+
+      const rmq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setPrefersReduced(rmq.matches);
+      const rmListener = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+      rmq.addEventListener("change", rmListener);
+
+      return () => {
+        mq.removeEventListener("change", listener);
+        rmq.removeEventListener("change", rmListener);
+      };
     }
   }, []);
 
@@ -73,8 +78,8 @@ export const AvatarParallax: React.FC<AvatarParallaxProps> = ({
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex items-center justify-center min-h-[420px] sm:min-h-[480px] lg:min-h-[530px] w-full max-w-full overflow-visible"
-      style={{ perspective: 1000 }}
+      className="relative flex items-center justify-center pt-[164px] sm:pt-[182px] lg:pt-[204px] pb-2 sm:pb-4 w-full max-w-full overflow-visible"
+      style={shouldReduceMotion ? undefined : { perspective: 1000 }}
     >
       {/* Slow Ambient Rotating Radial Focus Lines (CSS Animation) */}
       <svg
@@ -95,65 +100,64 @@ export const AvatarParallax: React.FC<AvatarParallaxProps> = ({
 
       {/* Tone Halftone Shadow Offset */}
       <m.div
-        style={{
-          x: springX,
-          y: springY,
-        }}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.15, duration: 0.4 }}
-        className="absolute w-[min(310px,76vw)] sm:w-[350px] lg:w-[390px] h-[350px] sm:h-[400px] lg:h-[440px] tone-shadow pointer-events-none select-none z-1"
+        style={
+          shouldReduceMotion
+            ? undefined
+            : {
+                x: springX,
+                y: springY,
+              }
+        }
+        className="absolute pointer-events-none select-none"
         aria-hidden="true"
-      />
-
-      {/* Main Avatar Panel with Slam Entrance and Mouse Parallax */}
-      <m.div
-        style={{
-          x: springX,
-          y: springY,
-          rotateX: springRotX,
-          rotateY: springRotY,
-          transformStyle: "preserve-3d",
-        }}
-        initial={{ scale: 1.06, rotate: -2, opacity: 0 }}
-        animate={{ scale: 1, rotate: 2.2, opacity: 1 }}
-        transition={slamSpring}
-        className="profile-frame w-[min(310px,76vw)] sm:w-[350px] lg:w-[390px] h-[350px] sm:h-[400px] lg:h-[440px] relative z-10 overflow-hidden flex items-center justify-center bg-tone"
       >
-        {children}
+        <div className="ml-6 sm:ml-0 translate-x-3 translate-y-3 sm:translate-x-4 sm:translate-y-4">
+          <div className="w-[min(70vw,260px)] h-[min(56vw,210px)] sm:w-[290px] sm:h-[320px] lg:w-[244px] lg:h-[285px] xl:w-[306px] xl:h-[355px] tone-shadow hero-tone-in" />
+        </div>
+      </m.div>
+
+      {/* Main Avatar Panel with CSS Slam Entrance and Mouse Parallax */}
+      <m.div
+        style={
+          shouldReduceMotion
+            ? undefined
+            : {
+                x: springX,
+                y: springY,
+                rotateX: springRotX,
+                rotateY: springRotY,
+                transformStyle: "preserve-3d",
+              }
+        }
+        className="relative z-10 ml-6 sm:ml-0"
+      >
+        <div className="profile-frame hero-avatar-slam w-[min(70vw,260px)] h-[min(56vw,210px)] sm:w-[290px] sm:h-[320px] lg:w-[244px] lg:h-[285px] xl:w-[306px] xl:h-[355px] relative overflow-hidden flex items-center justify-center bg-paper">
+          {children}
+        </div>
       </m.div>
 
       {/* Burst Bubble Pop In */}
-      <m.div
-        initial="hidden"
-        animate="visible"
-        variants={burstPopVariants}
-        className="absolute z-20 -right-2 top-4 sm:right-2 sm:top-6"
-      >
+      <div className="absolute z-20 right-0 top-0 sm:right-2 hero-burst-pop">
         {burstBubble}
-      </m.div>
+      </div>
 
       {/* Katakana Sound Effects with Initial Shake */}
-      <m.span
-        initial="hidden"
-        animate="visible"
-        variants={sfxShakeVariants}
-        className="sfx one absolute right-0 top-1 font-serif font-black vertical-rl text-[38px] sm:text-[46px] z-20 select-none pointer-events-none"
+      <span
+        className="sfx one hero-sfx-shake absolute left-1 sm:left-2 top-2 font-serif font-black leading-none text-[32px] sm:text-[40px] xl:text-[44px] z-20 select-none pointer-events-none"
         aria-hidden="true"
+        lang="ja"
       >
         {sfxOne}
-      </m.span>
+      </span>
 
-      <m.span
-        initial="hidden"
-        animate="visible"
-        variants={sfxShakeVariants}
-        transition={{ delay: 0.2 }}
-        className="sfx two absolute left-0 bottom-4 font-serif font-black vertical-rl text-[26px] sm:text-[30px] z-20 select-none pointer-events-none"
+      <span
+        style={{ animationDelay: "0.2s" }}
+        className="sfx two hero-sfx-shake absolute left-0 bottom-4 font-serif font-black leading-none text-[24px] sm:text-[28px] xl:text-[32px] z-20 select-none pointer-events-none"
         aria-hidden="true"
+        lang="ja"
       >
         {sfxTwo}
-      </m.span>
+      </span>
     </div>
   );
 };

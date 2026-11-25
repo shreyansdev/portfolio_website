@@ -4,7 +4,10 @@ export const siteConfig = {
   tagline: "Full-Stack Developer, Cybersecurity Enthusiast & IoT Builder",
   description:
     "Computer Science & Engineering student building scalable full-stack applications, real-time secure web systems, machine learning solutions, and IoT devices.",
-  avatarPath: "./avatar.png",
+  avatarLight800: "./avatar-light-800.webp",
+  avatarDark800: "./avatar-dark-800.webp",
+  avatarLight160: "./avatar-light-160.webp",
+  avatarDark160: "./avatar-dark-160.webp",
   avatarAlt: "Shreyans Jain, manga-style avatar",
   resumePath: "./resume.pdf",
   socials: {

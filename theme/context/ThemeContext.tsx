@@ -16,25 +16,60 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
+    const mq =
+      typeof window !== "undefined" && typeof window.matchMedia === "function"
+        ? window.matchMedia("(prefers-color-scheme: dark)")
+        : null;
+
+    const getStoredTheme = (): Theme | null => {
+      try {
+        const stored = localStorage.getItem("theme");
+        return stored === "light" || stored === "dark" ? stored : null;
+      } catch {
+        return null;
+      }
+    };
+
     try {
       const current = document.documentElement.getAttribute("data-theme") as Theme | null;
       if (current === "light" || current === "dark") {
         setThemeState(current);
       } else {
-        const stored = localStorage.getItem("theme") as Theme | null;
-        if (stored === "light" || stored === "dark") {
-          setThemeState(stored);
-          document.documentElement.setAttribute("data-theme", stored);
-        } else {
-          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          const initial = prefersDark ? "dark" : "light";
-          setThemeState(initial);
-          document.documentElement.setAttribute("data-theme", initial);
-        }
+        const stored = getStoredTheme();
+        const initial: Theme = stored ?? (mq?.matches ? "dark" : "light");
+        setThemeState(initial);
+        document.documentElement.setAttribute("data-theme", initial);
       }
     } catch {
       // Fallback if localStorage or matchMedia is restricted
     }
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      if (getStoredTheme() === null) {
+        const next: Theme = e.matches ? "dark" : "light";
+        setThemeState(next);
+        document.documentElement.setAttribute("data-theme", next);
+      }
+    };
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key !== "theme") return;
+      if (e.newValue === "light" || e.newValue === "dark") {
+        setThemeState(e.newValue);
+        document.documentElement.setAttribute("data-theme", e.newValue);
+      } else if (e.newValue === null && mq) {
+        const next: Theme = mq.matches ? "dark" : "light";
+        setThemeState(next);
+        document.documentElement.setAttribute("data-theme", next);
+      }
+    };
+
+    mq?.addEventListener("change", handleMediaChange);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      mq?.removeEventListener("change", handleMediaChange);
+      window.removeEventListener("storage", handleStorage);
+    };
   }, []);
 
   const setTheme = (newTheme: Theme) => {

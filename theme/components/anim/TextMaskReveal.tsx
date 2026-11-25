@@ -1,8 +1,4 @@
-"use client";
-
 import React from "react";
-import { m } from "framer-motion";
-import { mangaEase } from "../../functions/animations";
 
 interface TextMaskRevealProps {
   lines: { text: string; className?: string }[];
@@ -19,18 +15,12 @@ export const TextMaskReveal: React.FC<TextMaskRevealProps> = ({
     <h1 className={className}>
       {lines.map((line, idx) => (
         <span key={idx} className="block overflow-hidden py-0.5">
-          <m.span
-            className={`block ${line.className ?? ""}`}
-            initial={{ y: "105%", opacity: 0 }}
-            animate={{ y: "0%", opacity: 1 }}
-            transition={{
-              duration: 0.55,
-              ease: mangaEase,
-              delay: delay + idx * 0.1,
-            }}
+          <span
+            className={`block hero-text-mask ${line.className ?? ""}`}
+            style={{ animationDelay: `${delay + idx * 0.1}s` }}
           >
             {line.text}
-          </m.span>
+          </span>
         </span>
       ))}
     </h1>

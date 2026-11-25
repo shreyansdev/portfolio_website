@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anton, Inter, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "../theme/functions/siteConfig";
+import { resumeData } from "../content/resumeData";
 import { Navbar } from "../theme/partials/Navbar";
 import { ThemeProvider } from "../theme/context/ThemeContext";
 import { MotionProvider } from "../theme/context/MotionProvider";
@@ -26,9 +27,19 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+};
+
 export const metadata: Metadata = {
   title: siteConfig.title,
   description: siteConfig.description,
+  alternates: {
+    canonical: "https://shreyansdev.github.io/portfolio_website/",
+  },
   keywords: [
     "Shreyans Jain",
     "Portfolio",
@@ -47,9 +58,9 @@ export const metadata: Metadata = {
     url: "https://shreyansdev.github.io/portfolio_website/",
     images: [
       {
-        url: "https://shreyansdev.github.io/portfolio_website/avatar.png",
-        width: 1254,
-        height: 1254,
+        url: "https://shreyansdev.github.io/portfolio_website/og.png",
+        width: 1200,
+        height: 630,
         alt: siteConfig.avatarAlt,
       },
     ],
@@ -58,8 +69,22 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.title,
     description: siteConfig.description,
-    images: ["https://shreyansdev.github.io/portfolio_website/avatar.png"],
+    images: ["https://shreyansdev.github.io/portfolio_website/og.png"],
   },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: resumeData.personalInfo.name,
+  url: "https://shreyansdev.github.io/portfolio_website/",
+  image: "https://shreyansdev.github.io/portfolio_website/og.png",
+  sameAs: [siteConfig.socials.linkedin, siteConfig.socials.github],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: resumeData.education[0].institution,
+  },
+  jobTitle: resumeData.personalInfo.tagline,
 };
 
 export default function RootLayout({
@@ -68,21 +93,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);}else{var d=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",d);}}catch(e){document.documentElement.setAttribute("data-theme","light");}})();`,
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body
         className={`${anton.variable} ${inter.variable} ${dmMono.variable} bg-paper text-ink-new font-sans antialiased min-h-screen transition-colors duration-200`}
       >
+        <a href="#main" className="skip-link btn solid">
+          Skip to content
+        </a>
         <ThemeProvider>
           <MotionProvider>
             <Navbar />
-            <main className="relative">{children}</main>
+            <main id="main" tabIndex={-1} className="relative focus:outline-none">
+              {children}
+            </main>
           </MotionProvider>
         </ThemeProvider>
       </body>

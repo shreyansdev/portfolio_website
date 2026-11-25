@@ -11,7 +11,9 @@ interface CardTiltProps {
 export const CardTilt: React.FC<CardTiltProps> = ({ children, className = "" }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isPointerFine, setIsPointerFine] = useState(false);
-  const shouldReduceMotion = useReducedMotion();
+  const [prefersReduced, setPrefersReduced] = useState(false);
+  const motionReduced = useReducedMotion();
+  const shouldReduceMotion = Boolean(motionReduced || prefersReduced);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -19,7 +21,16 @@ export const CardTilt: React.FC<CardTiltProps> = ({ children, className = "" }) 
       setIsPointerFine(mq.matches);
       const listener = (e: MediaQueryListEvent) => setIsPointerFine(e.matches);
       mq.addEventListener("change", listener);
-      return () => mq.removeEventListener("change", listener);
+
+      const rmq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setPrefersReduced(rmq.matches);
+      const rmListener = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
+      rmq.addEventListener("change", rmListener);
+
+      return () => {
+        mq.removeEventListener("change", listener);
+        rmq.removeEventListener("change", rmListener);
+      };
     }
   }, []);
 
@@ -46,16 +57,20 @@ export const CardTilt: React.FC<CardTiltProps> = ({ children, className = "" }) 
   };
 
   return (
-    <div style={{ perspective: 1000 }} className="h-full">
+    <div style={shouldReduceMotion ? { perspective: "none" } : { perspective: 1000 }} className="h-full">
       <m.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
+        style={
+          shouldReduceMotion
+            ? {}
+            : {
+                rotateX,
+                rotateY,
+                transformStyle: "preserve-3d",
+              }
+        }
         className={`h-full ${className}`}
       >
         {children}
